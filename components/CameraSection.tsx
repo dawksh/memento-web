@@ -65,7 +65,6 @@ export default function CameraSection() {
         const targetFacingMode = facingMode === "user" ? "environment" : "user";
         let tempStream: MediaStream | null = null;
 
-        // Create status message element
         const showStatusMessage = (message: string) => {
             const statusEl = document.createElement('div');
             statusEl.className = 'fixed top-1/4 left-0 right-0 bg-black bg-opacity-70 text-white py-4 text-center text-xl font-bold z-50';
@@ -94,24 +93,18 @@ export default function CameraSection() {
         };
 
         try {
-            // Show first capture message
             const firstMessage = showStatusMessage(`CAPTURING ${originalFacingMode === "user" ? "FRONT" : "BACK"} CAMERA`);
             await new Promise((resolve) => setTimeout(resolve, 1000))
 
-            // Capture first image
             const firstCapture = captureFromVideo(videoRef.current, originalFacingMode === "user");
             if (!firstCapture) throw new Error("Failed to capture first image");
 
-            // Remove first message
             document.body.removeChild(firstMessage);
 
-            // Stop current stream
             stream?.getTracks().forEach(track => track.stop());
 
-            // Show switching message
             const switchingMessage = showStatusMessage("SWITCHING CAMERAS...");
 
-            // Switch camera
             const constraints = {
                 video: {
                     facingMode: targetFacingMode,
@@ -125,36 +118,28 @@ export default function CameraSection() {
             if (videoRef.current) {
                 videoRef.current.srcObject = tempStream;
 
-                // Wait for camera to load
                 await new Promise(resolve => {
                     const loadHandler = () => {
                         videoRef.current?.removeEventListener('loadeddata', loadHandler);
                         resolve(null);
                     };
                     videoRef.current!.addEventListener('loadeddata', loadHandler);
-                    setTimeout(resolve, 1000); // Fallback timeout
+                    setTimeout(resolve, 1000);
                 });
 
-                // Remove switching message
                 document.body.removeChild(switchingMessage);
 
-                // Show second capture message
                 const secondMessage = showStatusMessage(`CAPTURING ${targetFacingMode === "user" ? "FRONT" : "BACK"} CAMERA`);
 
-                // Additional stabilization delay
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
-                // Capture second image
                 const secondCapture = captureFromVideo(videoRef.current, targetFacingMode === "user");
                 if (!secondCapture) throw new Error("Failed to capture second image");
 
-                // Remove second message
                 document.body.removeChild(secondMessage);
 
-                // Show processing message
                 const processingMessage = showStatusMessage("CREATING DUAL CAMERA IMAGE...");
 
-                // Create final composite image
                 const finalCanvas = document.createElement('canvas');
                 const backCanvas = originalFacingMode === "user" ? secondCapture.canvas : firstCapture.canvas;
                 const frontCanvas = originalFacingMode === "user" ? firstCapture.canvas : secondCapture.canvas;
@@ -164,10 +149,8 @@ export default function CameraSection() {
                 const ctx = finalCanvas.getContext('2d');
                 if (!ctx) throw new Error("Failed to create canvas context");
 
-                // Draw background image
                 ctx.drawImage(backCanvas, 0, 0);
 
-                // Calculate inset dimensions
                 const insetSize = 0.25;
                 const insetWidth = frontCanvas.width * insetSize;
                 const insetHeight = frontCanvas.height * insetSize;
@@ -176,7 +159,6 @@ export default function CameraSection() {
                 const insetY = finalCanvas.height - insetHeight - padding;
                 const radius = Math.min(12, insetWidth * 0.1);
 
-                // Draw rounded rectangle for inset
                 ctx.save();
                 ctx.beginPath();
                 ctx.moveTo(insetX + radius, insetY);
@@ -190,7 +172,6 @@ export default function CameraSection() {
                 ctx.arcTo(insetX, insetY, insetX + radius, insetY, radius);
                 ctx.closePath();
 
-                // Style and draw inset
                 ctx.strokeStyle = 'white';
                 ctx.lineWidth = 3;
                 ctx.stroke();
@@ -198,17 +179,13 @@ export default function CameraSection() {
                 ctx.drawImage(frontCanvas, insetX, insetY, insetWidth, insetHeight);
                 ctx.restore();
 
-                // Remove processing message
                 document.body.removeChild(processingMessage);
 
-                // Show saving message
                 const savingMessage = showStatusMessage("SAVING IMAGE...");
 
-                // Save image
                 const timestamp = new Date().getTime();
                 const finalImage = finalCanvas.toDataURL('image/jpeg', 0.9);
 
-                // Download image
                 const link = document.createElement('a');
                 link.href = finalImage;
                 link.download = `bereal_${timestamp}.jpg`;
@@ -216,13 +193,8 @@ export default function CameraSection() {
                 link.click();
                 document.body.removeChild(link);
 
-                // Store in localStorage
-                localStorage.setItem('bereal_latest', finalImage);
-
-                // Remove saving message
                 document.body.removeChild(savingMessage);
 
-                // Show success message
                 const successMessage = showStatusMessage("IMAGE SAVED!");
                 setTimeout(() => document.body.removeChild(successMessage), 2000);
             }
