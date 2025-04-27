@@ -60,149 +60,198 @@ export default function CameraSection() {
     const handleSnap = async () => {
         if (!videoRef.current) return;
 
-        // Capture current camera view
-        const captureCurrentCamera = () => {
-            const canvas = document.createElement('canvas');
-            const video = videoRef.current;
-            if (!video) return null;
+        setLoading(true);
+        const originalFacingMode = facingMode;
+        const targetFacingMode = facingMode === "user" ? "environment" : "user";
+        let tempStream: MediaStream | null = null;
 
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+        // Create status message element
+        const showStatusMessage = (message: string) => {
+            const statusEl = document.createElement('div');
+            statusEl.className = 'fixed top-1/4 left-0 right-0 bg-black bg-opacity-70 text-white py-4 text-center text-xl font-bold z-50';
+            statusEl.textContent = message;
+            document.body.appendChild(statusEl);
+            return statusEl;
+        };
+
+        const captureFromVideo = (video: HTMLVideoElement, isUserFacing: boolean) => {
+            const canvas = document.createElement('canvas');
+            const width = video.videoWidth;
+            const height = video.videoHeight;
+            canvas.width = width;
+            canvas.height = height;
+
             const ctx = canvas.getContext('2d');
             if (!ctx) return null;
 
-            // Flip if using front camera
-            if (facingMode === "user") {
-                ctx.translate(canvas.width, 0);
+            if (isUserFacing) {
+                ctx.translate(width, 0);
                 ctx.scale(-1, 1);
             }
 
             ctx.drawImage(video, 0, 0);
-            return { canvas, dataUrl: canvas.toDataURL('image/jpeg') };
+            return { canvas, dataUrl: canvas.toDataURL('image/jpeg', 0.9) };
         };
 
-        // Store the current camera image
-        const currentCameraCapture = captureCurrentCamera();
-        if (!currentCameraCapture) return;
-
-        // Switch camera, wait for it to initialize, and capture second image
-        const currentFacingMode = facingMode;
-        const oppositeFacingMode = facingMode === "user" ? "environment" : "user";
-
-        // Stop current stream to release camera
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-        }
-
         try {
-            // Start opposite camera
-            setLoading(true);
-            const newConstraints = {
+            // Show first capture message
+            const firstMessage = showStatusMessage(`CAPTURING ${originalFacingMode === "user" ? "FRONT" : "BACK"} CAMERA`);
+            await new Promise((resolve) => setTimeout(resolve, 1000))
+
+            // Capture first image
+            const firstCapture = captureFromVideo(videoRef.current, originalFacingMode === "user");
+            if (!firstCapture) throw new Error("Failed to capture first image");
+
+            // Remove first message
+            document.body.removeChild(firstMessage);
+
+            // Stop current stream
+            stream?.getTracks().forEach(track => track.stop());
+
+            // Show switching message
+            const switchingMessage = showStatusMessage("SWITCHING CAMERAS...");
+
+            // Switch camera
+            const constraints = {
                 video: {
-                    facingMode: oppositeFacingMode,
+                    facingMode: targetFacingMode,
                     width: { ideal: 1280 },
                     height: { ideal: 720 },
                 }
             };
 
-            const newStream = await navigator.mediaDevices.getUserMedia(newConstraints);
+            tempStream = await navigator.mediaDevices.getUserMedia(constraints);
 
             if (videoRef.current) {
-                videoRef.current.srcObject = newStream;
+                videoRef.current.srcObject = tempStream;
 
-                // Wait for video to be ready
+                // Wait for camera to load
                 await new Promise(resolve => {
-                    videoRef.current!.onloadeddata = resolve;
+                    const loadHandler = () => {
+                        videoRef.current?.removeEventListener('loadeddata', loadHandler);
+                        resolve(null);
+                    };
+                    videoRef.current!.addEventListener('loadeddata', loadHandler);
+                    setTimeout(resolve, 1000); // Fallback timeout
                 });
 
-                // Give a small delay for camera to properly adjust
-                await new Promise(resolve => setTimeout(resolve, 300));
+                // Remove switching message
+                document.body.removeChild(switchingMessage);
 
-                // Capture opposite camera
-                const oppositeCameraCapture = captureCurrentCamera();
+                // Show second capture message
+                const secondMessage = showStatusMessage(`CAPTURING ${targetFacingMode === "user" ? "FRONT" : "BACK"} CAMERA`);
 
-                if (oppositeCameraCapture) {
-                    // Determine which is front and which is back
-                    let frontCapture, backCapture;
+                // Additional stabilization delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
-                    if (currentFacingMode === "user") {
-                        frontCapture = currentCameraCapture;
-                        backCapture = oppositeCameraCapture;
-                    } else {
-                        frontCapture = oppositeCameraCapture;
-                        backCapture = currentCameraCapture;
-                    }
+                // Capture second image
+                const secondCapture = captureFromVideo(videoRef.current, targetFacingMode === "user");
+                if (!secondCapture) throw new Error("Failed to capture second image");
 
-                    // Create final composite image
-                    const finalCanvas = document.createElement('canvas');
-                    finalCanvas.width = backCapture.canvas.width;
-                    finalCanvas.height = backCapture.canvas.height;
-                    const finalCtx = finalCanvas.getContext('2d');
+                // Remove second message
+                document.body.removeChild(secondMessage);
 
-                    if (finalCtx) {
-                        // Draw back camera image as background
-                        finalCtx.drawImage(backCapture.canvas, 0, 0);
+                // Show processing message
+                const processingMessage = showStatusMessage("CREATING DUAL CAMERA IMAGE...");
 
-                        // Calculate dimensions for front camera inset (25% of original size)
-                        const insetWidth = frontCapture.canvas.width * 0.25;
-                        const insetHeight = frontCapture.canvas.height * 0.25;
+                // Create final composite image
+                const finalCanvas = document.createElement('canvas');
+                const backCanvas = originalFacingMode === "user" ? secondCapture.canvas : firstCapture.canvas;
+                const frontCanvas = originalFacingMode === "user" ? firstCapture.canvas : secondCapture.canvas;
 
-                        // Position in bottom right with 16px padding
-                        const insetX = finalCanvas.width - insetWidth - 16;
-                        const insetY = finalCanvas.height - insetHeight - 16;
+                finalCanvas.width = backCanvas.width;
+                finalCanvas.height = backCanvas.height;
+                const ctx = finalCanvas.getContext('2d');
+                if (!ctx) throw new Error("Failed to create canvas context");
 
-                        // Draw front camera image with a white border
-                        finalCtx.lineWidth = 3;
-                        finalCtx.strokeStyle = 'white';
-                        finalCtx.fillStyle = 'black';
+                // Draw background image
+                ctx.drawImage(backCanvas, 0, 0);
 
-                        // Draw shadow/outline
-                        finalCtx.fillRect(insetX - 2, insetY - 2, insetWidth + 4, insetHeight + 4);
-                        finalCtx.strokeRect(insetX - 1, insetY - 1, insetWidth + 2, insetHeight + 2);
+                // Calculate inset dimensions
+                const insetSize = 0.25;
+                const insetWidth = frontCanvas.width * insetSize;
+                const insetHeight = frontCanvas.height * insetSize;
+                const padding = Math.min(16, finalCanvas.width * 0.02);
+                const insetX = finalCanvas.width - insetWidth - padding;
+                const insetY = finalCanvas.height - insetHeight - padding;
+                const radius = Math.min(12, insetWidth * 0.1);
 
-                        // Draw front camera image
-                        finalCtx.drawImage(frontCapture.canvas, insetX, insetY, insetWidth, insetHeight);
+                // Draw rounded rectangle for inset
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(insetX + radius, insetY);
+                ctx.lineTo(insetX + insetWidth - radius, insetY);
+                ctx.arcTo(insetX + insetWidth, insetY, insetX + insetWidth, insetY + radius, radius);
+                ctx.lineTo(insetX + insetWidth, insetY + insetHeight - radius);
+                ctx.arcTo(insetX + insetWidth, insetY + insetHeight, insetX + insetWidth - radius, insetY + insetHeight, radius);
+                ctx.lineTo(insetX + radius, insetY + insetHeight);
+                ctx.arcTo(insetX, insetY + insetHeight, insetX, insetY + insetHeight - radius, radius);
+                ctx.lineTo(insetX, insetY + radius);
+                ctx.arcTo(insetX, insetY, insetX + radius, insetY, radius);
+                ctx.closePath();
 
-                        // Generate final image and download
-                        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-                        const finalImage = finalCanvas.toDataURL('image/jpeg');
+                // Style and draw inset
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                ctx.clip();
+                ctx.drawImage(frontCanvas, insetX, insetY, insetWidth, insetHeight);
+                ctx.restore();
 
-                        const link = document.createElement('a');
-                        link.href = finalImage;
-                        link.download = `bereal_${timestamp}.jpg`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+                // Remove processing message
+                document.body.removeChild(processingMessage);
 
-                        // Save to localStorage if needed
-                        localStorage.setItem('bereal_image', finalImage);
-                    }
-                }
+                // Show saving message
+                const savingMessage = showStatusMessage("SAVING IMAGE...");
 
-                // Restore original camera
-                if (stream) {
-                    stream.getTracks().forEach(track => track.stop());
-                }
+                // Save image
+                const timestamp = new Date().getTime();
+                const finalImage = finalCanvas.toDataURL('image/jpeg', 0.9);
 
-                const originalConstraints = {
+                // Download image
+                const link = document.createElement('a');
+                link.href = finalImage;
+                link.download = `bereal_${timestamp}.jpg`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Store in localStorage
+                localStorage.setItem('bereal_latest', finalImage);
+
+                // Remove saving message
+                document.body.removeChild(savingMessage);
+
+                // Show success message
+                const successMessage = showStatusMessage("IMAGE SAVED!");
+                setTimeout(() => document.body.removeChild(successMessage), 2000);
+            }
+        } catch (error) {
+            console.error("BeReal capture error:", error);
+            const errorMessage = showStatusMessage("ERROR: CAPTURE FAILED");
+            setTimeout(() => document.body.removeChild(errorMessage), 3000);
+        } finally {
+            // Clean up and restore original camera
+            tempStream?.getTracks().forEach(track => track.stop());
+
+            try {
+                const newStream = await navigator.mediaDevices.getUserMedia({
                     video: {
-                        facingMode: currentFacingMode,
+                        facingMode: originalFacingMode,
                         width: { ideal: 1280 },
                         height: { ideal: 720 },
                     }
-                };
+                });
 
-                const originalStream = await navigator.mediaDevices.getUserMedia(originalConstraints);
-                setStream(originalStream);
-
+                setStream(newStream);
                 if (videoRef.current) {
-                    videoRef.current.srcObject = originalStream;
+                    videoRef.current.srcObject = newStream;
                 }
+            } catch (restoreError) {
+                console.error("Failed to restore original camera:", restoreError);
             }
-        } catch (error) {
-            console.error("Error during BeReal capture:", error);
-        } finally {
-            setFacingMode(currentFacingMode);
+
+            setFacingMode(originalFacingMode);
             setLoading(false);
         }
     };
@@ -229,14 +278,6 @@ export default function CameraSection() {
 
             {/* Camera view */}
             <div className="relative flex-1 w-full overflow-hidden border-x-4 border-white">
-                {loading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black">
-                        <div className="text-center">
-                            <Loader2 className="h-16 w-16 animate-spin text-white mb-4" />
-                            <div className="uppercase tracking-widest text-xs">LOADING CAMERA</div>
-                        </div>
-                    </div>
-                )}
 
                 {!loading && cameraPermission === false && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-black p-4 text-center">
