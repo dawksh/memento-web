@@ -220,7 +220,7 @@ export default function CameraSection() {
     })
 
     return (
-        <main className="fixed inset-0 w-3/4 h-3/4 flex flex-col bg-black font-mono text-white overflow-hidden">
+        <div className="w-full h-full flex flex-col bg-black font-mono text-white overflow-hidden">
             {/* Status bar */}
             <div className="flex justify-between items-center px-4 py-2 bg-white text-black border-b-4 border-white">
                 <div className="text-xs uppercase tracking-widest">memento</div>
@@ -292,6 +292,6 @@ export default function CameraSection() {
             <div className="flex justify-between items-center px-4 py-2 bg-white text-black text-xs uppercase tracking-widest">
                 <div>{cameraPermission ? "CAMERA: ON" : "CAMERA: OFF"}</div>
             </div>
-        </main>
+        </div>
     )
 }

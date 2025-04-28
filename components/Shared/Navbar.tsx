@@ -3,14 +3,15 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import { usePrivy } from '@privy-io/react-auth'
+import { shortenAddress } from '@/lib/utils'
 
 const Navbar = () => {
-    const { login } = usePrivy()
+    const { login, authenticated, user } = usePrivy()
     return (
         <div className='flex flex-row justify-between p-4'>
             <div className='italic font-semibold'>memento</div>
             <div>
-                <Button className='hover:cursor-pointer' onClick={login}>login</Button>
+                {authenticated ? <>{shortenAddress(user?.wallet?.address!)}</> : <Button className='hover:cursor-pointer' onClick={login}>login</Button>}
             </div>
         </div>
     )

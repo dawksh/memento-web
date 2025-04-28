@@ -1,6 +1,7 @@
 "use client"
 
-import SnapCamera from "@/components/SnapCamera";
+import OpenCamera from "@/components/Camera/OpenCamera";
+import SnapCamera from "@/components/Camera/SnapCamera";
 import sdk from "@farcaster/frame-sdk";
 import { useEffect, useState } from "react";
 
@@ -20,7 +21,7 @@ export default function Home() {
 
   return (
     <div className="flex justify-center items-center">
-      {/* <SnapCamera /> */}
+      <OpenCamera label="Open" />
     </div>
   );
 }
