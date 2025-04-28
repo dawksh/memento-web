@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from "react"
 import { FlipHorizontal, Loader2, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import axios from "axios"
+import { CloudinaryAsset } from "@/lib/types"
+import { uploadImageToCloudinary } from "@/lib/imageHelper"
 
 export default function CameraSection() {
     const videoRef = useRef<HTMLVideoElement>(null)
@@ -172,21 +175,11 @@ export default function CameraSection() {
                 ctx.restore();
 
                 document.body.removeChild(processingMessage);
-                const savingMessage = showStatusMessage("SAVING IMAGE...");
 
-                const timestamp = new Date().getTime();
                 const finalImage = finalCanvas.toDataURL('image/jpeg', 0.9);
 
-                const link = document.createElement('a');
-                link.href = finalImage;
-                link.download = `memento_${timestamp}.jpg`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                const url = await uploadImageToCloudinary(finalImage)
 
-                document.body.removeChild(savingMessage);
-                const successMessage = showStatusMessage("IMAGE SAVED!");
-                setTimeout(() => document.body.removeChild(successMessage), 2000);
             }
         } catch (error) {
             console.error("Memento capture error:", error);
