@@ -4,7 +4,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "../ui/button"
-import SnapCamera from "./SnapCamera"
+import CameraSection from "./CameraSection"
 
 
 const OpenCamera = ({ label, props }: { label: string, props?: any }) => {
@@ -13,7 +13,7 @@ const OpenCamera = ({ label, props }: { label: string, props?: any }) => {
             <Dialog >
                 <DialogTrigger><Button {...props} >{label}</Button></DialogTrigger>
                 <DialogContent className="[&>button]:hidden">
-                    <SnapCamera />
+                    <CameraSection />
                 </DialogContent>
             </Dialog>
 

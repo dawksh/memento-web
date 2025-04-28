@@ -1,7 +1,6 @@
 "use client"
 
 import OpenCamera from "@/components/Camera/OpenCamera";
-import SnapCamera from "@/components/Camera/SnapCamera";
 import sdk from "@farcaster/frame-sdk";
 import { useEffect, useState } from "react";
 import FeedLayout from '@/components/Feed/FeedLayout';
@@ -23,6 +22,7 @@ export default function Home() {
   return (
     <main>
       <FeedLayout />
+      <OpenCamera label="Open Camera" />
     </main>
   );
 }
