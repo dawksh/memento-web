@@ -97,7 +97,7 @@ export default function CameraSection() {
 
         try {
             const firstMessage = showStatusMessage(`CAPTURING ${originalFacingMode === "user" ? "FRONT" : "BACK"} CAMERA`);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
             const firstCapture = captureFromVideo(videoRef.current, originalFacingMode === "user");
             if (!firstCapture) throw new Error("Failed to capture first image");
