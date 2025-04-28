@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react"
 import { FlipHorizontal, Loader2, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import axios from "axios"
-import { CloudinaryAsset } from "@/lib/types"
 import { uploadImageToCloudinary } from "@/lib/imageHelper"
 
 export default function CameraSection() {
@@ -222,7 +220,7 @@ export default function CameraSection() {
     })
 
     return (
-        <main className="fixed inset-0 flex flex-col bg-black font-mono text-white overflow-hidden">
+        <main className="fixed inset-0 w-3/4 h-3/4 flex flex-col bg-black font-mono text-white overflow-hidden">
             {/* Status bar */}
             <div className="flex justify-between items-center px-4 py-2 bg-white text-black border-b-4 border-white">
                 <div className="text-xs uppercase tracking-widest">memento</div>
