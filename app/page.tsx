@@ -4,6 +4,7 @@ import OpenCamera from "@/components/Camera/OpenCamera";
 import SnapCamera from "@/components/Camera/SnapCamera";
 import sdk from "@farcaster/frame-sdk";
 import { useEffect, useState } from "react";
+import FeedLayout from '@/components/Feed/FeedLayout';
 
 export default function Home() {
 
@@ -20,8 +21,8 @@ export default function Home() {
   }, [loaded])
 
   return (
-    <div className="flex justify-center items-center">
-      <OpenCamera label="Open" />
-    </div>
+    <main>
+      <FeedLayout />
+    </main>
   );
 }
