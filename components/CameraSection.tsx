@@ -63,7 +63,7 @@ export default function CameraSection() {
         setLoading(true);
         const originalFacingMode = facingMode;
         const targetFacingMode = facingMode === "user" ? "environment" : "user";
-        let tempStream: MediaStream | null = null;
+        let tempStream = null;
 
         const showStatusMessage = (message: string) => {
             const statusEl = document.createElement('div');
@@ -94,30 +94,25 @@ export default function CameraSection() {
 
         try {
             const firstMessage = showStatusMessage(`CAPTURING ${originalFacingMode === "user" ? "FRONT" : "BACK"} CAMERA`);
-            await new Promise((resolve) => setTimeout(resolve, 1000))
+            await new Promise(resolve => setTimeout(resolve, 1000));
 
             const firstCapture = captureFromVideo(videoRef.current, originalFacingMode === "user");
             if (!firstCapture) throw new Error("Failed to capture first image");
 
             document.body.removeChild(firstMessage);
-
             stream?.getTracks().forEach(track => track.stop());
 
             const switchingMessage = showStatusMessage("SWITCHING CAMERAS...");
-
-            const constraints = {
+            tempStream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: targetFacingMode,
                     width: { ideal: 1280 },
                     height: { ideal: 720 },
                 }
-            };
-
-            tempStream = await navigator.mediaDevices.getUserMedia(constraints);
+            });
 
             if (videoRef.current) {
                 videoRef.current.srcObject = tempStream;
-
                 await new Promise(resolve => {
                     const loadHandler = () => {
                         videoRef.current?.removeEventListener('loadeddata', loadHandler);
@@ -128,16 +123,13 @@ export default function CameraSection() {
                 });
 
                 document.body.removeChild(switchingMessage);
-
                 const secondMessage = showStatusMessage(`CAPTURING ${targetFacingMode === "user" ? "FRONT" : "BACK"} CAMERA`);
-
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
                 const secondCapture = captureFromVideo(videoRef.current, targetFacingMode === "user");
                 if (!secondCapture) throw new Error("Failed to capture second image");
 
                 document.body.removeChild(secondMessage);
-
                 const processingMessage = showStatusMessage("CREATING DUAL CAMERA IMAGE...");
 
                 const finalCanvas = document.createElement('canvas');
@@ -180,7 +172,6 @@ export default function CameraSection() {
                 ctx.restore();
 
                 document.body.removeChild(processingMessage);
-
                 const savingMessage = showStatusMessage("SAVING IMAGE...");
 
                 const timestamp = new Date().getTime();
@@ -188,22 +179,20 @@ export default function CameraSection() {
 
                 const link = document.createElement('a');
                 link.href = finalImage;
-                link.download = `bereal_${timestamp}.jpg`;
+                link.download = `memento_${timestamp}.jpg`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
 
                 document.body.removeChild(savingMessage);
-
                 const successMessage = showStatusMessage("IMAGE SAVED!");
                 setTimeout(() => document.body.removeChild(successMessage), 2000);
             }
         } catch (error) {
-            console.error("BeReal capture error:", error);
+            console.error("Memento capture error:", error);
             const errorMessage = showStatusMessage("ERROR: CAPTURE FAILED");
             setTimeout(() => document.body.removeChild(errorMessage), 3000);
         } finally {
-            // Clean up and restore original camera
             tempStream?.getTracks().forEach(track => track.stop());
 
             try {
