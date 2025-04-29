@@ -21,8 +21,8 @@ export default function Home() {
 
   return (
     <main>
-      <FeedLayout />
       <OpenCamera label="Open Camera" />
+      <FeedLayout />
     </main>
   );
 }

@@ -98,12 +98,6 @@ export default function CameraSection() {
                 onConfirm={handleConfirm}
                 onCancel={cancelPreview}
             />
-
-            {/* Bottom status bar */}
-            <StatusBar
-                facingMode={facingMode}
-                cameraPermission={cameraPermission}
-            />
         </div>
     )
 }
