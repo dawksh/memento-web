@@ -4,6 +4,7 @@ import OpenCamera from "@/components/Camera/OpenCamera";
 import sdk from "@farcaster/frame-sdk";
 import { useEffect, useState } from "react";
 import FeedLayout from '@/components/Feed/FeedLayout';
+import { useUser } from "@/hooks/useUser";
 
 export default function Home() {
 
@@ -18,6 +19,12 @@ export default function Home() {
   useEffect(() => {
     if (loaded) sdk.actions.ready()
   }, [loaded])
+
+  const { data } = useUser()
+
+  useEffect(() => {
+    console.log(data)
+  }, [data])
 
   return (
     <main>
