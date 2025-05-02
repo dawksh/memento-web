@@ -1,42 +1,80 @@
-import React from 'react';
-import { FaFire, FaDollarSign, FaExternalLinkAlt } from 'react-icons/fa';
-import { format } from 'date-fns';
-import { Button } from '../ui/button';
+import React from "react";
+import { FaFire, FaDollarSign } from "react-icons/fa";
+import { format } from "date-fns";
+import { Button } from "../ui/button";
 
 interface PostProps {
   imageUrl: string;
   caption: string;
   timestamp: number;
-  username: string;
+  user: string;
 }
 
-const Post = ({ imageUrl, caption, timestamp, username }: PostProps) => {
+const Post = ({ imageUrl, timestamp, caption, user }: PostProps) => {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 mb-6 hover:shadow-md transition-shadow duration-200">
-      <img
-        src={imageUrl}
-        alt="Post"
-        className="w-full h-[400px] object-cover rounded-t-lg"
-      />
-      <div className="p-4">
-        <div className="flex justify-between items-center gap-2 mb-2">
-          <p className="text-sm text-gray-600">{username}</p>
-          <p className="text-sm text-gray-600">{format(new Date(timestamp), 'yyyy/MM/dd HH:mm')}</p>
+    <div className="w-full px-4 pt-4 pb-4 bg-white rounded-xl shadow-[0px_1px_3px_0px_rgba(0,0,0,0.05)] inline-flex flex-col justify-start items-start gap-5 overflow-hidden">
+      {/* User Header */}
+      <div className="self-stretch flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <img
+            className="size-6 rounded-full"
+            src={imageUrl}
+            alt={`${user}'s profile`}
+          />
+          <div className="text-neutral-900 text-sm font-bold leading-tight">
+            {user}
+          </div>
         </div>
-        <p className="text-lg font-semibold text-gray-800 mb-4">{caption}</p>
-        <div className="flex justify-between items-center gap-2">
-          <Button className="flex items-center gap-2 px-4 py-2 rounded-full bg-red-200 text-red-700 hover:bg-red-200 transition-colors">
-            <FaFire />
-            <span>Ape In</span>
+        <div className="text-xs text-gray-500">
+          {format(new Date(timestamp), 'MMM d, yyyy')}
+        </div>
+      </div>
+
+      {/* Caption */}
+      <div className="self-stretch text-sm text-neutral-800">
+        {caption}
+      </div>
+
+      {/* Post Image */}
+      <img
+        className="self-stretch h-64 rounded-md object-cover"
+        src={imageUrl}
+        alt={caption}
+      />
+
+
+      {/* Action Buttons */}
+      <div className="self-stretch flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-2xl border-red-400 flex items-center gap-1 px-3 py-1.5 hover:cursor-pointer"
+          >
+            <div className="size-4 relative overflow-hidden">
+              <FaFire fill="red" />
+            </div>
+            <span className="text-xs font-medium">Ape In</span>
           </Button>
-          <Button className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-200 transition-colors">
-            <FaExternalLinkAlt />
-            <span>View on Zora</span>
+
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-2xl border-green-500 flex items-center gap-1 px-3 py-1.5 hover:cursor-pointer"
+          >
+            <div className="size-4 relative overflow-hidden">
+              <FaDollarSign fill="green" />
+            </div>
+            <span className="text-xs font-medium">Cash Out</span>
           </Button>
-          <Button className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-200 text-green-700 hover:bg-green-200 transition-colors">
-            <FaDollarSign />
-            <span>Cash Out</span>
-          </Button>
+        </div>
+
+        <div className="p-1.5 bg-white rounded-2xl outline outline-offset-[-1px] outline-black/5 flex items-center">
+          <img
+            className="size-4"
+            src="https://res.cloudinary.com/metapass/image/upload/v1746199815/ourzora_logo_bshnqs.jpg"
+            alt="Zora logo"
+          />
         </div>
       </div>
     </div>

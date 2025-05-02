@@ -8,20 +8,20 @@ const RightSection = () => {
   const { user } = usePrivy();
 
   return (
-    <div className="w-1/4 h-screen p-4 sticky top-0">
+    <div className="w-full h-screen p-4 sticky top-0">
       {user && (
-        <div className="bg-background p-4 rounded-lg shadow-lg">
-          <div className="flex items-center space-x-4">
+        <div className="bg-background rounded-lg shadow-lg p-4">
+          <div className="flex items-center gap-3">
             <img
-              className="w-16 h-16 rounded-full"
+              className="size-14 rounded-full"
               src={`https://avatar.iran.liara.run/public?address=${user.wallet?.address}`}
-              alt="Profile picture"
+              alt="Profile"
             />
-            <div className="flex flex-col">
-              <div className="text-lg font-bold">{user.farcaster?.displayName}</div>
-              <div className="text-sm text-muted-foreground">
+            <div>
+              <h3 className="font-bold">{user.farcaster?.displayName}</h3>
+              <span className="text-xs text-muted-foreground">
                 {shortenAddress(user.wallet?.address!)}
-              </div>
+              </span>
             </div>
           </div>
         </div>

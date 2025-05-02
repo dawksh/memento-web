@@ -3,7 +3,6 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import { usePrivy } from '@privy-io/react-auth'
-import { shortenAddress } from '@/lib/utils'
 
 const Navbar = () => {
     const { login, logout, authenticated, user } = usePrivy()
