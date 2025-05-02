@@ -6,6 +6,8 @@ import { CameraDisplay } from "./CameraDisplay"
 import { CameraControls } from "./CameraControls"
 import { uploadImageToCloudinary, captureImages } from "@/lib/imageHelper"
 import { RefObject, useState } from "react"
+import axios from "axios"
+import { useUser } from "@/hooks/useUser"
 
 export default function CameraSection() {
     const {
@@ -26,6 +28,8 @@ export default function CameraSection() {
     } = useCamera()
 
     const [uploading, setUploading] = useState(false)
+
+    const { data: user } = useUser()
 
     const handleSnap = async () => {
         try {
@@ -59,9 +63,12 @@ export default function CameraSection() {
         setUploading(true)
         try {
             const url = await uploadImageToCloudinary(capturedImage)
-            console.log("Image uploaded successfully:", url)
-            // Here you can handle post-upload actions like showing a success message
-            // or navigating to another screen
+            const data = await axios.post("/api/moments", {
+                title: "devs just wanna have some fun",
+                userAddress: user?.walletAddress,
+                imageUrl: url
+            })
+            console.log(data)
         } catch (error) {
             console.error("Error uploading image:", error)
         } finally {

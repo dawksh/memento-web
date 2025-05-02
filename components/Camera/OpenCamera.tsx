@@ -10,8 +10,8 @@ import CameraSection from "./CameraSection"
 const OpenCamera = ({ label, props }: { label: string, props?: any }) => {
     return (
         <div className="flex justify-center items-center">
-            <Dialog >
-                <DialogTrigger><Button {...props} >{label}</Button></DialogTrigger>
+            <Dialog>
+                <DialogTrigger><Button variant="outline" {...props} >{label}</Button></DialogTrigger>
                 <DialogContent className="[&>button]:hidden">
                     <CameraSection />
                 </DialogContent>
