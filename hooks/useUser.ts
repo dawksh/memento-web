@@ -12,7 +12,7 @@ export function useUser(address?: string) {
             const { data } = await axios.get<User>("/api/user", { params: { address } })
             return data
         },
-        refetchInterval: 600,
+        refetchInterval: 60000 * 1,
         staleTime: 600000,
         enabled: !!address,
     })

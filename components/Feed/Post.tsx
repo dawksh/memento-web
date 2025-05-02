@@ -2,12 +2,15 @@ import React from "react";
 import { FaFire, FaDollarSign } from "react-icons/fa";
 import { format } from "date-fns";
 import { Button } from "../ui/button";
+import { User } from "@/types/user";
+import { isAddress } from "viem";
+import { getMediaLink, getUserProfileImage, shortenAddress } from "@/lib/utils";
 
 interface PostProps {
   imageUrl: string;
   caption: string;
-  timestamp: number;
-  user: string;
+  timestamp: string;
+  user: User;
 }
 
 const Post = ({ imageUrl, timestamp, caption, user }: PostProps) => {
@@ -18,11 +21,11 @@ const Post = ({ imageUrl, timestamp, caption, user }: PostProps) => {
         <div className="flex items-center gap-2">
           <img
             className="size-6 rounded-full"
-            src={imageUrl}
+            src={getUserProfileImage(user)}
             alt={`${user}'s profile`}
           />
           <div className="text-neutral-900 text-sm font-bold leading-tight">
-            {user}
+            {isAddress(user.username) ? shortenAddress(user.username) : user.username}
           </div>
         </div>
         <div className="text-xs text-gray-500">
@@ -38,7 +41,7 @@ const Post = ({ imageUrl, timestamp, caption, user }: PostProps) => {
       {/* Post Image */}
       <img
         className="self-stretch h-64 rounded-md object-cover"
-        src={imageUrl}
+        src={getMediaLink(imageUrl)}
         alt={caption}
       />
 
