@@ -1,3 +1,4 @@
+import { User } from "@/types/user";
 import { usePrivy } from "@privy-io/react-auth";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -8,11 +9,11 @@ export function useUser(address?: string) {
     return useQuery({
         queryKey: ["user", address],
         queryFn: async () => {
-            const { data } = await axios.get("/api/user", { params: { address } })
+            const { data } = await axios.get<User>("/api/user", { params: { address } })
             return data
         },
         refetchInterval: 600,
-        staleTime: 600000, // 10 minutes in milliseconds
+        staleTime: 600000,
         enabled: !!address,
     })
 }

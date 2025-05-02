@@ -4,7 +4,7 @@ import { backend } from '@/lib/api';
 export async function GET(req: NextRequest) {
     try {
         const searchParams = req.nextUrl.searchParams
-        console.log(searchParams.get("address"))
+
         const { data } = await backend.get("/user", {
             params: {
                 address: searchParams.get('address')
