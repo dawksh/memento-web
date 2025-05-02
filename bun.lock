@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "memento",
+      "name": "momnt",
       "dependencies": {
         "@farcaster/frame-sdk": "^0.0.36",
         "@privy-io/react-auth": "^2.11.1",

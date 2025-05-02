@@ -155,7 +155,7 @@ async function captureImages(
             });
         }
     } catch (error) {
-        console.error("Memento capture error:", error);
+        console.error("momnt capture error:", error);
         const errorMessage = showStatusMessage("ERROR: CAPTURE FAILED");
         setTimeout(() => document.body.removeChild(errorMessage), 3000);
     } finally {

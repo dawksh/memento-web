@@ -45,6 +45,7 @@ const MainFeed = () => {
             caption={post.caption}
             timestamp={post.createdAt}
             user={post.user}
+            coinAddress={post.coinAddress}
           />
         ))}
       </div>

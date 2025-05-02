@@ -27,7 +27,7 @@ export function StatusBar({ facingMode, cameraPermission }: StatusBarProps) {
         <>
             {/* Top Status bar */}
             <div className="flex justify-between items-center px-4 py-2 bg-white text-black border-b-4 border-white">
-                <div className="text-xs uppercase tracking-widest">memento</div>
+                <div className="text-xs uppercase tracking-widest">momnt</div>
                 <div className="text-xs">{formattedTime}</div>
                 <div className="text-xs uppercase">{facingMode === "user" ? "FRONT" : "BACK"}</div>
             </div>

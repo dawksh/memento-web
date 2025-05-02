@@ -11,9 +11,10 @@ interface PostProps {
   caption: string;
   timestamp: string;
   user: User;
+  coinAddress: string
 }
 
-const Post = ({ imageUrl, timestamp, caption, user }: PostProps) => {
+const Post = ({ imageUrl, timestamp, caption, user, coinAddress }: PostProps) => {
   return (
     <div className="w-full px-4 pt-4 pb-4 bg-white rounded-xl shadow-[0px_1px_3px_0px_rgba(0,0,0,0.05)] inline-flex flex-col justify-start items-start gap-5 overflow-hidden">
       {/* User Header */}
@@ -73,11 +74,13 @@ const Post = ({ imageUrl, timestamp, caption, user }: PostProps) => {
         </div>
 
         <div className="p-1.5 bg-white rounded-2xl outline outline-offset-[-1px] outline-black/5 flex items-center">
-          <img
-            className="size-4"
-            src="https://res.cloudinary.com/metapass/image/upload/v1746199815/ourzora_logo_bshnqs.jpg"
-            alt="Zora logo"
-          />
+          <button onClick={() => window.open(`https://zora.co/coin/base:${coinAddress}`, "_blank")}>
+            <img
+              className="size-4"
+              alt="Zora logo"
+              src="https://res.cloudinary.com/metapass/image/upload/v1746199815/ourzora_logo_bshnqs.jpg"
+            />
+          </button>
         </div>
       </div>
     </div>

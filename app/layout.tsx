@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "memento",
-  description: "make monies snapping memories",
+  title: "momnt",
+  description: "capture momnts",
 };
 
 export default function RootLayout({
