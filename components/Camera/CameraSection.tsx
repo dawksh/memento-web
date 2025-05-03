@@ -68,7 +68,6 @@ export default function CameraSection() {
                 userAddress: user?.walletAddress,
                 imageUrl: url
             })
-            console.log(data)
         } catch (error) {
             console.error("Error uploading image:", error)
         } finally {
