@@ -5,33 +5,6 @@ import Post from './Post';
 import { useMoments } from '@/hooks/useMoments';
 
 const MainFeed = () => {
-  // Example posts - in a real app, this would come from a data source
-  // const posts = [
-  //   {
-  //     imageUrl: "https://picsum.photos/800/600",
-  //     caption: "Example post 1",
-  //     timestamp: Date.now(),
-  //     user: "daksh"
-  //   },
-  //   {
-  //     imageUrl: "https://picsum.photos/800/601",
-  //     caption: "Example post 2",
-  //     timestamp: Date.now(),
-  //     user: "daksh"
-  //   },
-  //   {
-  //     imageUrl: "https://picsum.photos/800/606",
-  //     caption: "Example post 3",
-  //     timestamp: Date.now(),
-  //     user: "daksh"
-  //   },
-  //   {
-  //     imageUrl: "https://picsum.photos/800/603",
-  //     caption: "Example post 4",
-  //     timestamp: Date.now(),
-  //     user: "daksh"
-  //   }
-  // ];
 
   const { data: posts } = useMoments()
 

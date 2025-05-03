@@ -65,7 +65,7 @@ export default function CameraSection() {
         try {
             const url = await uploadImageToCloudinary(capturedImage)
             const data = await axios.post("/api/moments", {
-                title: "devs just wanna have some fun",
+                title: caption,
                 userAddress: user?.walletAddress,
                 imageUrl: url
             })
@@ -78,7 +78,7 @@ export default function CameraSection() {
     }
 
     return (
-        <div className="w-full h-full flex flex-col font-mono text-white  overflow-hidden">
+        <div className="w-full h-full flex flex-col font-mono text-white items-center overflow-hidden">
             {/* Top status bar */}
             {!previewMode && <StatusBar
                 facingMode={facingMode}
@@ -96,7 +96,7 @@ export default function CameraSection() {
                 capturedImage={capturedImage}
             />
 
-            {previewMode && <Input placeholder="add caption" className="mt-2 w-full" onChange={e => setCaption(e.target.value)} />}
+            {previewMode && <Input placeholder="add caption" className="text-black mt-2 w-3/4 text-center" onChange={e => setCaption(e.target.value)} />}
 
             {/* Control buttons */}
             <CameraControls
