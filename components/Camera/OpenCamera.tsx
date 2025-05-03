@@ -1,6 +1,7 @@
 import {
     Dialog,
     DialogContent,
+    DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "../ui/button"
@@ -11,7 +12,7 @@ const OpenCamera = ({ label, props }: { label: string, props?: any }) => {
     return (
         <div className="flex justify-center items-center">
             <Dialog>
-                <DialogTrigger><Button variant="outline" {...props} >{label}</Button></DialogTrigger>
+                <DialogTrigger><div {...props} >{label}</div></DialogTrigger>
                 <DialogContent className="[&>button]:hidden">
                     <CameraSection />
                 </DialogContent>

@@ -8,6 +8,7 @@ import { uploadImageToCloudinary, captureImages } from "@/lib/imageHelper"
 import { RefObject, useState } from "react"
 import axios from "axios"
 import { useUser } from "@/hooks/useUser"
+import { Input } from "../ui/input"
 
 export default function CameraSection() {
     const {
@@ -21,13 +22,13 @@ export default function CameraSection() {
         setCapturedImage,
         previewMode,
         setPreviewMode,
-        dualCaptureData,
         setDualCaptureData,
         cancelPreview,
         setLoading
     } = useCamera()
 
     const [uploading, setUploading] = useState(false)
+    const [caption, setCaption] = useState("")
 
     const { data: user } = useUser()
 
@@ -77,12 +78,12 @@ export default function CameraSection() {
     }
 
     return (
-        <div className="w-full h-full flex flex-col bg-black font-mono text-white overflow-hidden">
+        <div className="w-full h-full flex flex-col font-mono text-white  overflow-hidden">
             {/* Top status bar */}
-            <StatusBar
+            {!previewMode && <StatusBar
                 facingMode={facingMode}
                 cameraPermission={cameraPermission}
-            />
+            />}
 
             {/* Camera view or preview */}
             <CameraDisplay
@@ -94,6 +95,8 @@ export default function CameraSection() {
                 previewMode={previewMode}
                 capturedImage={capturedImage}
             />
+
+            {previewMode && <Input placeholder="add caption" className="mt-2 w-full" onChange={e => setCaption(e.target.value)} />}
 
             {/* Control buttons */}
             <CameraControls

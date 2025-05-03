@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Camera, X, Check } from "lucide-react"
 
 type CameraControlsProps = {
     loading: boolean
@@ -19,31 +20,34 @@ export function CameraControls({
 }: CameraControlsProps) {
     if (previewMode) {
         return (
-            <div className="grid grid-cols-2 border-t-4 border-white">
+            <div className="grid grid-cols-2 gap-px bg-gray-200 shadow-md m-2">
                 <Button
-                    className="py-6 text-xl bg-red-600 hover:bg-red-700 text-white font-bold rounded-none uppercase tracking-widest"
+                    className="flex items-center justify-center py-6 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-medium rounded-none transition-colors duration-200"
                     onClick={onCancel}
                 >
-                    CANCEL
+                    <X className="mr-2 h-5 w-5" />
+                    <span className="tracking-wide">CANCEL</span>
                 </Button>
                 <Button
-                    className="py-6 text-xl bg-green-600 hover:bg-green-700 text-white font-bold rounded-none uppercase tracking-widest"
+                    className="flex items-center justify-center py-6 bg-white hover:bg-green-50 text-green-600 hover:text-green-700 font-medium rounded-none transition-colors duration-200"
                     onClick={onConfirm}
                 >
-                    CONFIRM
+                    <Check className="mr-2 h-5 w-5" />
+                    <span className="tracking-wide">CONFIRM</span>
                 </Button>
             </div>
         )
     }
 
     return (
-        <div className="grid grid-cols-1 border-t-4 border-white">
+        <div className="border-t border-gray-200 shadow-md m-2">
             <Button
-                className="py-8 text-2xl bg-white hover:bg-gray-300 text-black font-bold rounded-none uppercase tracking-widest"
+                className="w-full flex items-center justify-center gap-2 py-8 bg-white hover:bg-gray-100 text-gray-800 font-medium rounded-none transition-colors duration-200"
                 disabled={loading || cameraPermission === false}
                 onClick={onSnap}
             >
-                SNAP
+                <Camera className="h-6 w-6" />
+                <span className="tracking-wide">SNAP</span>
             </Button>
         </div>
     )

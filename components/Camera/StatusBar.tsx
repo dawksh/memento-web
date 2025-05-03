@@ -29,12 +29,7 @@ export function StatusBar({ facingMode, cameraPermission }: StatusBarProps) {
             <div className="flex justify-between items-center px-4 py-2 bg-white text-black border-b-4 border-white">
                 <div className="text-xs uppercase tracking-widest">momnt</div>
                 <div className="text-xs">{formattedTime}</div>
-                <div className="text-xs uppercase">{facingMode === "user" ? "FRONT" : "BACK"}</div>
-            </div>
-
-            {/* Bottom Status indicators */}
-            <div className="flex justify-between items-center px-4 py-2 bg-white text-black text-xs uppercase tracking-widest">
-                <div>{cameraPermission ? "CAMERA: ON" : "CAMERA: OFF"}</div>
+                <div className="text-xs uppercase">side: {facingMode === "user" ? "FRONT" : "BACK"}</div>
             </div>
         </>
     )
