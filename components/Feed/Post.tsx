@@ -3,8 +3,11 @@ import { FaFire, FaDollarSign } from "react-icons/fa";
 import { format } from "date-fns";
 import { Button } from "../ui/button";
 import { User } from "@/types/user";
-import { isAddress } from "viem";
+import { Address, createPublicClient, createWalletClient, custom, Hex, http, isAddress, parseEther } from "viem";
 import { getMediaLink, getUserProfileImage, shortenAddress } from "@/lib/utils";
+import { useWallets } from "@privy-io/react-auth";
+import { base } from "viem/chains"
+import { tradeCoin } from "@zoralabs/coins-sdk"
 
 interface PostProps {
   imageUrl: string;
@@ -24,6 +27,7 @@ const Post = ({
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [, setImageDimensions] = useState({ width: 0, height: 0 });
+  const { wallets } = useWallets()
 
   useEffect(() => {
     // Create and append the style element for the specific image
@@ -75,6 +79,7 @@ const Post = ({
     };
   }, [imageUrl]);
 
+
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
     setImageDimensions({
@@ -83,6 +88,61 @@ const Post = ({
     });
     setImageLoaded(true);
   };
+
+  const buyCoin = async () => {
+    const wallet = wallets[0];
+    await wallet.switchChain(base.id)
+    const provider = await wallet.getEthereumProvider()
+    const publicClient = createPublicClient({
+      chain: base,
+      transport: custom(provider)
+    })
+    const walletClient = createWalletClient({
+      account: wallet.address as Hex,
+      chain: base,
+      transport: custom(provider)
+    })
+
+    const buyParams = {
+      direction: "buy" as const,
+      target: coinAddress as Address,
+      args: {
+        recipient: wallet.address as Address,
+        orderSize: parseEther("0.0001"),
+        tradeReferrer: "0x000dDd385E319F9d797F945D1d774fc2bC170AD1" as Address,
+      }
+    };
+
+    const { hash } = await tradeCoin(buyParams, walletClient, publicClient)
+    console.log(hash)
+  }
+  const sellCoin = async () => {
+    const wallet = wallets[0];
+    await wallet.switchChain(base.id)
+    const provider = await wallet.getEthereumProvider()
+    const publicClient = createPublicClient({
+      chain: base,
+      transport: custom(provider)
+    })
+    const walletClient = createWalletClient({
+      account: wallet.address as Hex,
+      chain: base,
+      transport: custom(provider)
+    })
+
+    const sellParams = {
+      direction: "sell" as const,
+      target: coinAddress as Address,
+      args: {
+        recipient: wallet.address as Address,
+        orderSize: parseEther("10"),
+        tradeReferrer: "0x000dDd385E319F9d797F945D1d774fc2bC170AD1" as Address,
+      }
+    };
+
+    const { hash } = await tradeCoin(sellParams, walletClient, publicClient)
+    console.log(hash)
+  }
 
   // Generate a clean class name from the imageUrl
   const containerClassName = `post-image-container-style-${imageUrl.replace(/[^a-zA-Z0-9]/g, "")}`;
@@ -142,6 +202,7 @@ const Post = ({
             variant="outline"
             size="sm"
             className="rounded-2xl border-red-400 flex items-center gap-1 px-3 py-1.5 hover:cursor-pointer"
+            onClick={buyCoin}
           >
             <div className="size-4 relative overflow-hidden">
               <FaFire fill="red" />
@@ -153,6 +214,7 @@ const Post = ({
             variant="outline"
             size="sm"
             className="rounded-2xl border-green-500 flex items-center gap-1 px-3 py-1.5 hover:cursor-pointer"
+            onClick={sellCoin}
           >
             <div className="size-4 relative overflow-hidden">
               <FaDollarSign fill="green" />
