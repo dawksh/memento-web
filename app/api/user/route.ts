@@ -18,3 +18,9 @@ export async function GET(req: NextRequest) {
         );
     }
 }
+
+export async function POST(req: NextRequest) {
+    const { updates } = await req.json();
+    const { data } = await backend.post("/user", updates);
+    return NextResponse.json(data);
+}
