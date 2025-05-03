@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useUser } from '@/hooks/useUser';
 import { shortenAddress } from '@/lib/utils';
 import { Loader2, PencilIcon } from 'lucide-react';
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { IoShareSocialSharp } from 'react-icons/io5';
 import { isAddress } from 'viem';
 import { FileUploader } from "react-drag-drop-files";
@@ -15,12 +15,18 @@ import axios from 'axios';
 
 const ProfileCard = () => {
     const { data: user } = useUser();
-    const [username, setUsername] = useState(user?.username);
-    const [about, setAbout] = useState(user?.about);
+    const [username, setUsername] = useState('');
+    const [about, setAbout] = useState('');
     const [profileImage, setProfileImage] = useState<File | null>(null);
-    const [name, setName] = useState(user?.name);
+    const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
     const close = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        setUsername(user?.username || '');
+        setAbout(user?.about || '');
+        setName(user?.name || '');
+    }, [user]);
 
     const handleSubmit = async () => {
         const updates: any = {
@@ -46,7 +52,6 @@ const ProfileCard = () => {
         close.current?.click();
     }
 
-
     return (
         <div>
             <Dialog>
@@ -69,7 +74,7 @@ const ProfileCard = () => {
                             <div className="px-3 py-1.5 bg-white rounded-2xl outline  outline-offset-[-1px] outline-neutral-900/5 flex items-center gap-1 hover:cursor-pointer">
                                 <PencilIcon className="size-4" />
                                 <DialogTrigger asChild>
-                                    <span className="text-neutral-900/90 text-xs font-medium">Edit Profile</span>
+                                    {user && <span className="text-neutral-900/90 text-xs font-medium">Edit Profile</span>}
                                 </DialogTrigger>
                             </div>
                             <button className="px-3 py-1.5 bg-white rounded-2xl outline outline-offset-[-1px] outline-neutral-900/5 flex items-center gap-1">

@@ -15,7 +15,7 @@ const Navbar = () => {
                 <div className="border border-gray-200 px-8 py-2 rounded-3xl">
                     <OpenCamera
                         label="post • 3h 2m"
-                        props={{ className: "text-sm text-semibold" }}
+                        props={{ className: "text-sm text-semibold hover:cursor-pointer" }}
                     />
                 </div>
             )}
