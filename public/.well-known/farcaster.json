@@ -1,0 +1,27 @@
+{
+    "accountAssociation": {
+        "header": "eyJmaWQiOjI0ODMsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHg1MzkyNWIyQzI3NjQ5QkU3ODZiZDMxMTU5ODBjOGU3YjEyOUY4RTE0In0",
+        "payload": "eyJkb21haW4iOiJhcHAubW9tbnQuZnVuIn0",
+        "signature": "MHhmOGVhMzZlNDQ0NTJhMjNiMzhjZGMwMWNhMzhhZDgxMmQxN2M3NDI2Y2FhNDZjODA1MjBiYjdkZjVjYzg5ZGVjNTczZGUxZDAxODc1MDQ0YWJmODJmMjQ1MWIzNWRiNTNhMzNhZWIwNjE5YzYwNjE1YTVjY2NhODFiMGRiYzJmYTFj"
+    },
+    "frame": {
+        "version": "1",
+        "name": "momnt",
+        "iconUrl": "https://app.momnt.fun/momnt.png",
+        "splashImageUrl": "https://app.momnt.fun/momnt.png",
+        "splashBackgroundColor": "#000000",
+        "homeUrl": "https://app.momnt.fun",
+        "subtitle": "capture momnts",
+        "description": "be raw, capture momnts, earn rewards.",
+        "primaryCategory": "social",
+        "tags": [
+            "rewards",
+            "earn"
+        ],
+        "heroImageUrl": "https://app.momnt.fun/momnt.png",
+        "tagline": "capture momnts",
+        "ogTitle": "momnt",
+        "ogDescription": "be raw, capture momnts, earn rewards.",
+        "ogImageUrl": "https://app.momnt.fun/momnt.png"
+    }
+}

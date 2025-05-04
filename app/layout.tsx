@@ -16,8 +16,24 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "momnt",
-  description: "capture momnts",
-};
+  description: "capture momnts, earn rewards",
+  other: {
+    "fc:frame": JSON.stringify({
+      version: "1.0.0",
+      imageUrl: "https://app.momnt.fun/momnt.png",
+      button: {
+        title: `capture momnt`,
+        action: {
+          type: "launch_frame",
+          name: "momnt",
+          url: "https://app.momnt.fun",
+          splashImageUrl: "https://app.momnt.fun/momnt.png",
+          splashBackgroundColor: `#000000`,
+        },
+      },
+    }),
+  },
+}
 
 export default function RootLayout({
   children,
