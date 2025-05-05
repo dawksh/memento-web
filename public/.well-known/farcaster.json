@@ -22,6 +22,7 @@
         "tagline": "capture momnts",
         "ogTitle": "momnt",
         "ogDescription": "be raw, capture momnts, earn rewards.",
-        "ogImageUrl": "https://app.momnt.fun/momnt.png"
+        "ogImageUrl": "https://app.momnt.fun/momnt.png",
+        "webhookUrl": "https://api.momnt.fun/webhook"
     }
 }
