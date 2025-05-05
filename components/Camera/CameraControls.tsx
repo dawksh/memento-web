@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Camera, X, Check } from "lucide-react"
+import { Camera, X, Check, Loader2 } from "lucide-react"
 
 type CameraControlsProps = {
     loading: boolean
@@ -24,6 +24,7 @@ export function CameraControls({
                 <Button
                     className="flex items-center justify-center py-6 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-medium rounded-none transition-colors duration-200"
                     onClick={onCancel}
+                    disabled={loading}
                 >
                     <X className="mr-2 h-5 w-5" />
                     <span className="tracking-wide">CANCEL</span>
@@ -31,8 +32,9 @@ export function CameraControls({
                 <Button
                     className="flex items-center justify-center py-6 bg-white hover:bg-green-50 text-green-600 hover:text-green-700 font-medium rounded-none transition-colors duration-200"
                     onClick={onConfirm}
+                    disabled={loading}
                 >
-                    <Check className="mr-2 h-5 w-5" />
+                    {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Check className="mr-2 h-5 w-5" />}
                     <span className="tracking-wide">CONFIRM</span>
                 </Button>
             </div>

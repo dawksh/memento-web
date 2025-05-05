@@ -60,6 +60,7 @@ export default function CameraSection() {
 
     const handleConfirm = async () => {
         if (!capturedImage) return
+        setLoading(true)
 
         setUploading(true)
         try {
@@ -75,6 +76,7 @@ export default function CameraSection() {
             setUploading(false)
             cancelPreview()
         }
+        setLoading(false)
     }
 
     return (
