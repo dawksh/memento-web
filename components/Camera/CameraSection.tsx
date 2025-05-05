@@ -67,7 +67,7 @@ export default function CameraSection() {
         setUploading(true)
         try {
             const url = await uploadImageToCloudinary(capturedImage)
-            const data = await axios.post("/api/moments", {
+            await axios.post("/api/moments", {
                 title: caption,
                 userAddress: user.walletAddress,
                 imageUrl: url
