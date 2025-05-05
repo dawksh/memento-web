@@ -9,6 +9,7 @@ import { RefObject, useState } from "react"
 import axios from "axios"
 import { Input } from "../ui/input"
 import { usePrivy } from "@privy-io/react-auth"
+import { useUser } from "@/hooks/useUser"
 
 export default function CameraSection() {
     const {
@@ -30,7 +31,7 @@ export default function CameraSection() {
     const [uploading, setUploading] = useState(false)
     const [caption, setCaption] = useState("")
 
-    const { user } = usePrivy()
+    const { data: user } = useUser()
 
     const handleSnap = async () => {
         try {
@@ -60,7 +61,7 @@ export default function CameraSection() {
 
     const handleConfirm = async () => {
         if (!capturedImage) return
-        if (!user?.wallet?.address) return
+        if (!user?.walletAddress) return
         setLoading(true)
 
         setUploading(true)
@@ -68,7 +69,7 @@ export default function CameraSection() {
             const url = await uploadImageToCloudinary(capturedImage)
             const data = await axios.post("/api/moments", {
                 title: caption,
-                userAddress: user?.wallet?.address,
+                userAddress: user.walletAddress,
                 imageUrl: url
             })
         } catch (error) {
