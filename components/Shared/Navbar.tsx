@@ -3,9 +3,12 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { usePrivy } from "@privy-io/react-auth";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useUser } from "@/hooks/useUser";
 
 const Navbar = () => {
     const { login, logout, authenticated } = usePrivy();
+    const { data: user } = useUser()
 
     return (
         <div className="flex flex-row justify-between items-center p-4">
@@ -14,6 +17,10 @@ const Navbar = () => {
             <div>
                 {authenticated ? (
                     <>
+                        <Avatar className="md:hidden">
+                            <AvatarImage src={user?.profileImage || `https://effigy.im/a/${user?.walletAddress}.svg`} />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
                         <Button onClick={logout}>logout</Button>
                     </>
                 ) : (
