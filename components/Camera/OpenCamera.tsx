@@ -8,7 +8,7 @@ import { Button } from "../ui/button"
 import CameraSection from "./CameraSection"
 
 
-const OpenCamera = ({ label, props }: { label: string, props?: any }) => {
+const OpenCamera = ({ label, props }: { label: React.ReactNode, props?: any }) => {
     return (
         <div className="flex justify-center items-center">
             <Dialog>
