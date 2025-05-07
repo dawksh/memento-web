@@ -77,7 +77,7 @@ const ProfileCard = () => {
                                     {user && <span className="text-neutral-900/90 text-xs font-medium">Edit Profile</span>}
                                 </DialogTrigger>
                             </div>
-                            <button className="px-3 py-1.5 bg-white rounded-2xl outline outline-offset-[-1px] outline-neutral-900/5 flex items-center gap-1">
+                            <button className="px-3 py-1.5 bg-gray-100 cursor-not-allowed rounded-2xl outline outline-offset-[-1px] outline-neutral-900/5 flex items-center gap-1">
                                 <IoShareSocialSharp />
                                 <span className="text-neutral-900/90 text-xs font-medium">Share Profile</span>
                             </button>
