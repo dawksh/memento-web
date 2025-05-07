@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: "capture momnts, earn rewards",
   other: {
     "fc:frame": JSON.stringify({
-      version: "1.0.0",
+      version: "next",
       imageUrl: "https://app.momnt.fun/momnt.png",
       button: {
         title: `capture momnt`,
