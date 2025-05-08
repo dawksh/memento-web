@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     try {
         const data = await parseWebhookEvent(body, verifyAppKeyWithNeynar);
+        console.log(data);
         const { event, fid } = data;
         switch (event.event) {
             case "frame_added":
