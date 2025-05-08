@@ -25,6 +25,7 @@ import {
 } from "../ui/dialog";
 import { getClients } from "@/lib/wallet";
 import TradeActions from "./TradeActions";
+import env from "@/config/env";
 
 interface PostProps {
   imageUrl: string;
@@ -51,7 +52,7 @@ const Post = ({
 
   const publicClient = createPublicClient({
     chain: base,
-    transport: http(),
+    transport: http(env.NEXT_PUBLIC_BASE_RPC_URL),
   });
 
   useEffect(() => {
@@ -232,14 +233,7 @@ const Post = ({
 
       {/* Action Buttons */}
       <div className="self-stretch flex justify-between items-center">
-        <TradeActions
-          balance={balance}
-          tokenBalance={tokenBalance}
-          amount={amount}
-          setAmount={setAmount}
-          buyCoin={buyCoin}
-          sellCoin={sellCoin}
-        />
+        <TradeActions coinAddress={coinAddress} />
         <div className="p-1.5 bg-white rounded-2xl outline outline-offset-[-1px] outline-black/5 flex items-center">
           <button
             className="hover:cursor-pointer"
