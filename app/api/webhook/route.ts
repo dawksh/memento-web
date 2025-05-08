@@ -6,33 +6,34 @@ import {
     parseWebhookEvent,
     verifyAppKeyWithNeynar,
 } from "@farcaster/frame-node";
+import { deleteUserNotificationDetails } from "@/lib/redis";
+import { setUserNotificationDetails } from "@/lib/redis";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
     try {
         const data = await parseWebhookEvent(body, verifyAppKeyWithNeynar);
-        console.log(data);
         const { event, fid } = data;
         switch (event.event) {
             case "frame_added":
                 if (event.notificationDetails) {
-                    await backend.post("/webhook", { fid, details: event.notificationDetails });
+                    await setUserNotificationDetails(fid.toString(), event.notificationDetails);
                 } else {
-                    await backend.post("/webhook", { fid, details: null });
+                    await deleteUserNotificationDetails(fid.toString());
                 }
 
                 break;
             case "frame_removed":
-                await backend.post("/webhook", { fid, details: null });
+                await deleteUserNotificationDetails(fid.toString());
 
                 break;
             case "notifications_enabled":
-                await backend.post("/webhook", { fid, details: event.notificationDetails });
+                await setUserNotificationDetails(fid.toString(), event.notificationDetails);
 
 
                 break;
             case "notifications_disabled":
-                await backend.post("/webhook", { fid, details: null });
+                await deleteUserNotificationDetails(fid.toString());
 
                 break;
         }
