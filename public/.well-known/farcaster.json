@@ -23,6 +23,6 @@
         "ogTitle": "momnt",
         "ogDescription": "be raw, capture momnts, earn rewards.",
         "ogImageUrl": "https://app.momnt.fun/momnt.png",
-        "webhookUrl": "https://api.neynar.com/f/app/28cd9a88-5015-4e89-85b4-748efa3e9f09/event"
+        "webhookUrl": "https://api.momnt.fun/webhook"
     }
 }
