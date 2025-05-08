@@ -7,6 +7,7 @@ import {
 } from "@farcaster/frame-node";
 import { deleteUserNotificationDetails } from "@/lib/redis";
 import { setUserNotificationDetails } from "@/lib/redis";
+import { sendFrameNotification } from "@/lib/frame";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -17,6 +18,7 @@ export async function POST(req: NextRequest) {
             case "frame_added":
                 if (event.notificationDetails) {
                     await setUserNotificationDetails(fid.toString(), event.notificationDetails);
+                    await sendFrameNotification(fid.toString(), [event.notificationDetails.token], "knock knock, is this thing working?", "welcome to momnt");
                 } else {
                     await deleteUserNotificationDetails(fid.toString());
                 }
