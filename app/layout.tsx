@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Provider";
 import Navbar from "@/components/Shared/Navbar";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Script defer src="https://umami-production-6fa2.up.railway.app/script.js" data-website-id="2c78eb34-77c2-4f35-861b-d2b889ad83b1" />
         <Providers>
           <Navbar />
           {children}
