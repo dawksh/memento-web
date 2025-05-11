@@ -9,11 +9,11 @@ export function useUser(address?: string) {
     return useQuery({
         queryKey: ["user", address],
         queryFn: async () => {
-            const { data } = await axios.get<User>("/api/user", { params: { address } })
+            const { data } = await axios.get<User | null>("/api/user", { params: { address } })
             return data
         },
         refetchInterval: 60000 * 1,
-        staleTime: 600000,
+        staleTime: 60000 * 1,
         enabled: !!address,
     })
 }

@@ -11,10 +11,12 @@ import { isAddress } from 'viem';
 import { FileUploader } from "react-drag-drop-files";
 import { fileToDataURL, uploadImageToCloudinary } from '@/lib/imageHelper';
 import axios from 'axios';
+import { User } from '@/types/user';
 
-
-const ProfileCard = () => {
-    const { data: user } = useUser();
+// Accept user prop
+const ProfileCard = ({ user: userProp }: { user?: User }) => {
+    const { data: userFetched } = useUser();
+    const user = userProp || userFetched;
     const [username, setUsername] = useState('');
     const [about, setAbout] = useState('');
     const [profileImage, setProfileImage] = useState<File | null>(null);
@@ -67,7 +69,7 @@ const ProfileCard = () => {
                                 </div>
                             </div>
                             <div className="text-zinc-800 text-sm leading-tight">
-                                {user.about != "\"\"" ? user.about : <div className='text-gray-500'>no about</div>}
+                                {user.about != '""' ? user.about : <div className='text-gray-500'>no about</div>}
                             </div>
                         </div>
                         <div className="flex gap-2">

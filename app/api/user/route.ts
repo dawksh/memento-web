@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
     try {
         const searchParams = req.nextUrl.searchParams
 
-        const { data } = await backend.get("/user", {
+        const { data } = await backend.get("/profile", {
             params: {
                 address: searchParams.get('address')
             }
