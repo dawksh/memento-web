@@ -27,7 +27,7 @@ const getTimeLeft = (target: number) => {
 };
 
 const MainFeed = () => {
-  const { data: posts, isLoading } = useMoments();
+  const { data: posts, isLoading } = useMoments({});
   const { authenticated } = usePrivy();
 
 
