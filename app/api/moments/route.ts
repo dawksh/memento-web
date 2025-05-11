@@ -7,7 +7,8 @@ export async function GET(req: NextRequest) {
 
         const { data } = await backend.get("/moments", {
             params: {
-                coin: searchParams.get('coin')
+                coin: searchParams.get('coin'),
+                user: searchParams.get('user')
             }
         })
         return NextResponse.json(data);
