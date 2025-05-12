@@ -8,7 +8,6 @@ import { uploadImageToCloudinary, captureImages } from "@/lib/imageHelper"
 import { RefObject, useState } from "react"
 import axios from "axios"
 import { Input } from "../ui/input"
-import { usePrivy } from "@privy-io/react-auth"
 import { useUser } from "@/hooks/useUser"
 
 export default function CameraSection() {

@@ -7,10 +7,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useUser } from "@/hooks/useUser";
 import sdk from "@farcaster/frame-sdk";
 import { useFarcasterContext } from "@/hooks/useFarcasterContext";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
     const { login, logout, authenticated } = usePrivy();
     const { data: user } = useUser()
+    const router = useRouter()
 
     const { data: fcCtx } = useFarcasterContext()
 
@@ -35,7 +37,7 @@ const Navbar = () => {
             <div>
                 {authenticated ? (
                     <div className="flex flex-row items-center gap-2">
-                        <Avatar className="md:hidden">
+                        <Avatar className="md:hidden" onClick={() => router.push('/profile')}>
                             <AvatarImage src={user?.profileImage || `https://effigy.im/a/${user?.walletAddress}.svg`} />
                         </Avatar>
                         <Button onClick={logout}>logout</Button>
