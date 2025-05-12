@@ -91,19 +91,19 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
                             <Input
                                 placeholder="name"
                                 className="text-black"
-                                value={user.name}
+                                value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
                             <Input
                                 placeholder="username"
                                 className="text-black"
-                                value={user.username}
+                                value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                             <Textarea
                                 placeholder="about"
                                 className="text-black"
-                                value={user.about}
+                                value={about}
                                 onChange={(e) => setAbout(e.target.value)}
                             />
                             <FileUploader
