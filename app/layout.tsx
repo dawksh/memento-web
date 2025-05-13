@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   other: {
     "fc:frame": JSON.stringify({
       version: "next",
-      imageUrl: "https://app.momnt.fun/momnt.png",
+      imageUrl: "https://app.momnt.fun/momnt-banner.png",
       button: {
         title: `capture momnt`,
         action: {
