@@ -26,6 +26,7 @@ import {
 import { getClients } from "@/lib/wallet";
 import TradeActions from "./TradeActions";
 import env from "@/config/env";
+import Link from "next/link";
 
 interface PostProps {
   imageUrl: string;
@@ -188,15 +189,19 @@ const Post = ({
       {/* User Header */}
       <div className="self-stretch flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <img
-            className="size-6 rounded-full"
-            src={getUserProfileImage(user)}
-            alt={`${user}'s profile`}
-          />
+          <Link href={`/profile/${user.walletAddress}`}>
+            <img
+              className="size-6 rounded-full"
+              src={getUserProfileImage(user)}
+              alt={`${user}'s profile`}
+            />
+          </Link>
           <div className="text-neutral-900 text-sm font-bold leading-tight">
-            {isAddress(user.username)
-              ? shortenAddress(user.username)
-              : user.username}
+            <Link href={`/profile/${user.walletAddress}`}>
+              {isAddress(user.username)
+                ? shortenAddress(user.username)
+                : user.username}
+            </Link>
           </div>
         </div>
         <div className="text-xs text-gray-500">
