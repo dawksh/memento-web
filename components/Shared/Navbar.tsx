@@ -8,7 +8,7 @@ import { useUser } from "@/hooks/useUser";
 import sdk from "@farcaster/frame-sdk";
 import { useFarcasterContext } from "@/hooks/useFarcasterContext";
 import { useRouter } from "next/navigation";
-
+import Link from "next/link";
 const Navbar = () => {
     const { login, logout, authenticated } = usePrivy();
     const { data: user } = useUser()
@@ -25,19 +25,19 @@ const Navbar = () => {
                 className="bg-blue-500 hover:bg-blue-600 text-white font-medium"
                 variant="outline"
             >
-                Save Frame
+                Save App
             </Button>
         );
     };
 
     return (
         <div className="flex flex-row justify-between items-center p-4 sticky md:relative top-0 bg-white z-50">
-            <div className="italic font-semibold">momnt</div>
+            <Link href="/" className="italic font-semibold">momnt</Link>
             {renderSaveFcButton()}
             <div>
                 {authenticated ? (
                     <div className="flex flex-row items-center gap-2">
-                        <Avatar className="md:hidden" onClick={() => router.push('/profile')}>
+                        <Avatar className="md:hidden" onClick={() => router.push(`/profile/${user?.walletAddress}`)}>
                             <AvatarImage src={user?.profileImage || `https://effigy.im/a/${user?.walletAddress}.svg`} />
                         </Avatar>
                         <Button onClick={logout}>logout</Button>

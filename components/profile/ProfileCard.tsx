@@ -17,6 +17,7 @@ import { Loader2 } from "lucide-react";
 import { fileToDataURL } from "@/lib/imageHelper";
 import { uploadImageToCloudinary } from "@/lib/imageHelper";
 import axios from "axios";
+import { useUser } from "@/hooks/useUser";
 
 type ProfileCardProps = {
     user: {
@@ -36,6 +37,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
     const [profileImage, setProfileImage] = useState<File | null>(null)
     const [loading, setLoading] = useState(false)
     const close = useRef<HTMLButtonElement | null>(null)
+
+    const { data: loggedInUser } = useUser()
 
     const handleSubmit = async () => {
         const updates: any = {
@@ -78,7 +81,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
                     {user.about || <span className="text-gray-400">No about info</span>}
                 </div>
                 <DialogTrigger asChild>
-                    {user && (
+                    {loggedInUser?.walletAddress === user.walletAddress && (
                         <span className="text-neutral-900/90 text-xs font-medium border-gray-200 border rounded-md px-4 py-2 cursor-pointer">
                             Edit Profile
                         </span>
