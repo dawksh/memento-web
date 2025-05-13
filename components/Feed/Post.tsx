@@ -210,9 +210,11 @@ const Post = ({
       </div>
 
       {/* Caption */}
-      <div className="self-stretch text-sm text-neutral-800">
-        {caption}
-      </div>
+      {caption != "" && (
+        <div className="self-stretch text-sm text-neutral-800">
+          {caption}
+        </div>
+      )}
 
       {/* Post Image with Background Blur */}
       <div
