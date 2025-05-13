@@ -60,7 +60,7 @@ export default function CameraSection() {
 
     const handleConfirm = async () => {
         if (!capturedImage) return
-        if (!user?.walletAddress) return
+        if (!user || !user?.walletAddress) return
         setLoading(true)
 
         setUploading(true)
