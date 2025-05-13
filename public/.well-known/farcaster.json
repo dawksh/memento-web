@@ -16,13 +16,14 @@
         "primaryCategory": "social",
         "tags": [
             "rewards",
-            "earn"
+            "earn",
+            "momnt"
         ],
-        "heroImageUrl": "https://app.momnt.fun/momnt.png",
+        "heroImageUrl": "https://app.momnt.fun/momnt-banner.png",
         "tagline": "capture momnts",
         "ogTitle": "momnt",
         "ogDescription": "be raw, capture momnts, earn rewards.",
-        "ogImageUrl": "https://app.momnt.fun/momnt.png",
+        "ogImageUrl": "https://app.momnt.fun/momnt-banner.png",
         "webhookUrl": "https://app.momnt.fun/api/webhook"
     }
 }
