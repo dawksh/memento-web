@@ -42,6 +42,7 @@ export function CameraDisplay({
                 />
             ) : (
                 <video
+                    key={previewMode ? "preview" : "camera"}
                     ref={videoRef}
                     autoPlay
                     playsInline

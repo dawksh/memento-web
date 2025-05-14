@@ -18,6 +18,9 @@ import { fileToDataURL } from "@/lib/imageHelper";
 import { uploadImageToCloudinary } from "@/lib/imageHelper";
 import axios from "axios";
 import { useUser } from "@/hooks/useUser";
+import { shortenAddress } from "@/lib/utils";
+import { isAddress } from "viem";
+
 
 type ProfileCardProps = {
     user: {
@@ -75,8 +78,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
                     alt="Profile"
                     className="w-24 h-24 rounded-full object-cover border border-gray-200 mb-2"
                 />
-                <div className="text-lg font-semibold text-gray-900">{user.name}</div>
-                <div className="text-gray-500 text-sm mb-2">@{user.username}</div>
+                <div className="text-lg font-semibold text-gray-900">{isAddress(user.name) ? shortenAddress(user.name) : user.name}</div>
+                <div className="text-gray-500 text-sm mb-2">@{isAddress(user.username) ? shortenAddress(user.username) : user.username}</div>
                 <div className="text-gray-700 text-center text-sm">
                     {user.about || <span className="text-gray-400">No about info</span>}
                 </div>

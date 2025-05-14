@@ -5,12 +5,12 @@ import { StatusBar } from "./StatusBar"
 import { CameraDisplay } from "./CameraDisplay"
 import { CameraControls } from "./CameraControls"
 import { uploadImageToCloudinary, captureImages } from "@/lib/imageHelper"
-import { RefObject, useState } from "react"
+import { RefObject, useState, useEffect } from "react"
 import axios from "axios"
 import { Input } from "../ui/input"
 import { useUser } from "@/hooks/useUser"
 
-export default function CameraSection() {
+export default function CameraSection({ onClose, onForceClose }: { onClose?: () => void, onForceClose?: () => void }) {
     const {
         videoRef,
         stream,
@@ -32,18 +32,25 @@ export default function CameraSection() {
 
     const { data: user } = useUser()
 
+    useEffect(() => {
+        return () => {
+            const video = videoRef.current
+            const mediaStream = video?.srcObject as MediaStream | null
+            mediaStream?.getTracks().forEach(track => track.stop())
+            if (video) video.srcObject = null
+        }
+    }, [])
+
     const handleSnap = async () => {
         try {
-            if (!videoRef.current) {
-                throw new Error('Video element not found');
-            }
+            if (!videoRef.current) throw new Error('Video element not found')
             await captureImages(
                 // @ts-expect-error type error
                 videoRef,
                 stream,
                 facingMode,
                 setLoading,
-                (data) => {
+                data => {
                     setDualCaptureData({
                         frontImage: data.frontImage,
                         backImage: data.backImage,
@@ -54,31 +61,37 @@ export default function CameraSection() {
                 }
             )
         } catch (error) {
-            console.error("Error capturing images:", error)
+            console.error('Error capturing images:', error)
         }
+    }
+
+    const handleCancel = () => {
+        cancelPreview()
+        setLoading(false)
+        if (onForceClose) onForceClose()
     }
 
     const handleConfirm = async () => {
         if (!capturedImage) return
         if (!user || !user?.walletAddress) return
         setLoading(true)
-
         setUploading(true)
         try {
             const url = await uploadImageToCloudinary(capturedImage)
-            await axios.post("/api/moments", {
+            await axios.post('/api/moments', {
                 title: caption,
                 userAddress: user.walletAddress,
                 imageUrl: url
             })
             setCaption("")
+            if (onClose) onClose()
         } catch (error) {
-            console.error("Error uploading image:", error)
+            console.error('Error uploading image:', error)
         } finally {
             setUploading(false)
             cancelPreview()
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     return (
@@ -109,7 +122,7 @@ export default function CameraSection() {
                 previewMode={previewMode}
                 onSnap={handleSnap}
                 onConfirm={handleConfirm}
-                onCancel={cancelPreview}
+                onCancel={handleCancel}
             />
         </div>
     )
