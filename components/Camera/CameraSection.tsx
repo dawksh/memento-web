@@ -86,6 +86,7 @@ export default function CameraSection({ onClose, onForceClose }: { onClose?: () 
                 imageUrl: url
             })
             queryClient.invalidateQueries({ queryKey: ["moments"] })
+            queryClient.invalidateQueries({ queryKey: ["hasPosted"] })
             setCaption("")
             if (onClose) onClose()
         } catch (error) {
