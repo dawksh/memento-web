@@ -8,16 +8,11 @@ import { getClients } from "@/lib/wallet";
 import { tradeCoin } from "@zoralabs/coins-sdk";
 import {
     Address,
-    createPublicClient,
-    erc20Abi,
-    formatEther,
     Hex,
-    http,
     parseEther,
 } from "viem";
-import env from "@/config/env";
 import { useBalances } from "@/hooks/useBalances";
-
+import { toast } from "sonner";
 
 const TradeActions = ({ coinAddress }: { coinAddress: string }) => {
     const { wallets } = useWallets();
@@ -45,7 +40,11 @@ const TradeActions = ({ coinAddress }: { coinAddress: string }) => {
                 tradeReferrer: "0x000dDd385E319F9d797F945D1d774fc2bC170AD1" as Address,
             },
         };
-        await tradeCoin(buyParams, walletClient, publicClient);
+        const { hash } = await tradeCoin(buyParams, walletClient, publicClient);
+        toast.success("Successfully bought coin", {
+            icon: "🎉",
+            id: `buy-${hash}`
+        });
     }, [wallets, coinAddress, amount]);
 
     const sellCoin = useCallback(async () => {
@@ -62,7 +61,11 @@ const TradeActions = ({ coinAddress }: { coinAddress: string }) => {
                 orderSize: parseEther(amount),
             },
         };
-        await tradeCoin(sellParams, walletClient, publicClient);
+        const { hash } = await tradeCoin(sellParams, walletClient, publicClient);
+        toast.success("Successfully sold coin", {
+            icon: "🎉",
+            id: `sell-${hash}`
+        });
     }, [wallets, coinAddress, amount]);
 
     return (

@@ -1,7 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { FaFire, FaDollarSign } from "react-icons/fa";
 import { format } from "date-fns";
-import { Button } from "../ui/button";
 import { User } from "@/types/user";
 import {
   Address,
@@ -17,17 +15,11 @@ import { getMediaLink, getUserProfileImage, shortenAddress } from "@/lib/utils";
 import { useWallets } from "@privy-io/react-auth";
 import { base } from "viem/chains";
 import { tradeCoin } from "@zoralabs/coins-sdk";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
 import { getClients } from "@/lib/wallet";
 import TradeActions from "./TradeActions";
 import env from "@/config/env";
 import Link from "next/link";
-
+import { toast } from "sonner";
 interface PostProps {
   imageUrl: string;
   caption: string;
@@ -152,6 +144,12 @@ const Post = ({
     };
 
     const { hash } = await tradeCoin(buyParams, walletClient, publicClient);
+
+    toast.success("Successfully bought coin", {
+      icon: "🎉",
+      id: `buy-${hash}`
+    });
+
   };
   const sellCoin = async () => {
     const wallet = wallets[0];
@@ -176,6 +174,11 @@ const Post = ({
       walletClient,
       publicClient
     );
+
+    toast.success("Successfully sold coin", {
+      icon: "🎉",
+      id: `sell-${hash}`
+    });
   };
 
   // Generate a clean class name from the imageUrl

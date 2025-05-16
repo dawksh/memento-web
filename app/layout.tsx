@@ -5,6 +5,7 @@ import Providers from "@/components/Provider";
 import Navbar from "@/components/Shared/Navbar";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { Toaster } from "@/components/ui/sonner"
 import { PostHogProvider } from "@/app/providers/PostHogProvider";
 
 const geistSans = Geist({
@@ -55,6 +56,7 @@ export default function RootLayout({
           <Providers>
             <Navbar />
             {children}
+            <Toaster />
           </Providers>
           <Analytics />
         </PostHogProvider>
