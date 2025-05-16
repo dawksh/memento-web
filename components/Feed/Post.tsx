@@ -2,30 +2,32 @@ import React, { useRef, useEffect, useState } from "react";
 import { format } from "date-fns";
 import { User } from "@/types/user";
 import {
-  Address,
   createPublicClient,
-  erc20Abi,
-  formatEther,
-  Hex,
   http,
   isAddress,
-  parseEther,
 } from "viem";
 import { getMediaLink, getUserProfileImage, shortenAddress } from "@/lib/utils";
 import { useWallets } from "@privy-io/react-auth";
 import { base } from "viem/chains";
-import { tradeCoin } from "@zoralabs/coins-sdk";
-import { getClients } from "@/lib/wallet";
 import TradeActions from "./TradeActions";
 import env from "@/config/env";
 import Link from "next/link";
-import { toast } from "sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
+
+
 interface PostProps {
   imageUrl: string;
   caption: string;
   timestamp: string;
   user: User;
   coinAddress: string;
+  rewards: string;
 }
 
 const Post = ({
@@ -34,19 +36,12 @@ const Post = ({
   caption,
   user,
   coinAddress,
+  rewards,
 }: PostProps) => {
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [, setImageDimensions] = useState({ width: 0, height: 0 });
-  const { wallets } = useWallets();
-  const [balance, setBalance] = useState("0");
-  const [tokenBalance, setTokenBalance] = useState("0");
-  const [amount, setAmount] = useState("0");
 
-  const publicClient = createPublicClient({
-    chain: base,
-    transport: http(env.NEXT_PUBLIC_BASE_RPC_URL),
-  });
 
   useEffect(() => {
     const styleId = `style-${imageUrl.replace(/[^a-zA-Z0-9]/g, "")}`;
@@ -95,25 +90,6 @@ const Post = ({
     };
   }, [imageUrl]);
 
-  useEffect(() => {
-    if (!wallets[0]) return;
-    publicClient
-      .getBalance({ address: wallets[0].address as Address })
-      .then((bal) => setBalance(formatEther(bal)));
-  }, [wallets, publicClient]);
-
-  useEffect(() => {
-    if (!wallets[0]) return;
-    publicClient
-      .readContract({
-        address: coinAddress as Address,
-        abi: erc20Abi,
-        functionName: "balanceOf",
-        args: [wallets[0].address as Address],
-      })
-      .then((bal) => setTokenBalance(formatEther(bal)));
-  }, [wallets, publicClient]);
-
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
     setImageDimensions({
@@ -121,64 +97,6 @@ const Post = ({
       height: img.naturalHeight,
     });
     setImageLoaded(true);
-  };
-
-  const buyCoin = async () => {
-    const wallet = wallets[0];
-    await wallet.switchChain(base.id);
-    const provider = await wallet.getEthereumProvider();
-    const { publicClient, walletClient } = getClients(
-      provider,
-      wallet.address as Hex
-    );
-
-    const buyParams = {
-      direction: "buy" as const,
-      target: coinAddress as Address,
-      args: {
-        recipient: wallet.address as Address,
-        orderSize: parseEther(amount),
-        tradeReferrer:
-          "0x000dDd385E319F9d797F945D1d774fc2bC170AD1" as Address,
-      },
-    };
-
-    const { hash } = await tradeCoin(buyParams, walletClient, publicClient);
-
-    toast.success("Successfully bought coin", {
-      icon: "🎉",
-      id: `buy-${hash}`
-    });
-
-  };
-  const sellCoin = async () => {
-    const wallet = wallets[0];
-    await wallet.switchChain(base.id);
-    const provider = await wallet.getEthereumProvider();
-    const { publicClient, walletClient } = getClients(
-      provider,
-      wallet.address as Hex
-    );
-
-    const sellParams = {
-      direction: "sell" as const,
-      target: coinAddress as Address,
-      args: {
-        recipient: wallet.address as Address,
-        orderSize: parseEther(amount),
-      },
-    };
-
-    const { hash } = await tradeCoin(
-      sellParams,
-      walletClient,
-      publicClient
-    );
-
-    toast.success("Successfully sold coin", {
-      icon: "🎉",
-      id: `sell-${hash}`
-    });
   };
 
   // Generate a clean class name from the imageUrl
@@ -243,23 +161,38 @@ const Post = ({
 
       {/* Action Buttons */}
       <div className="self-stretch flex justify-between items-center">
-        <TradeActions coinAddress={coinAddress} />
-        <div className="p-1.5 bg-white rounded-2xl outline outline-offset-[-1px] outline-black/5 flex items-center">
-          <button
-            className="hover:cursor-pointer"
-            onClick={() =>
-              window.open(
-                `https://zora.co/coin/base:${coinAddress}`,
-                "_blank"
-              )
-            }
-          >
-            <img
-              className="size-4"
-              alt="Zora logo"
-              src="https://res.cloudinary.com/metapass/image/upload/v1746199815/ourzora_logo_bshnqs.jpg"
-            />
-          </button>
+        <div className="flex items-center gap-4">
+          <TradeActions coinAddress={coinAddress} />
+        </div>
+        <div className="flex items-center gap-4">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger><div className="px-3 py-1.5 bg-green-50 rounded-2xl flex items-center gap-1">
+                <span className="text-green-600 text-sm font-medium">${rewards}</span>
+              </div></TooltipTrigger>
+              <TooltipContent>
+                Creator Rewards for this post
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <div className="p-1.5 bg-white rounded-2xl outline outline-offset-[-1px] outline-black/5 flex items-center">
+            <button
+              className="hover:cursor-pointer"
+              onClick={() =>
+                window.open(
+                  `https://zora.co/coin/base:${coinAddress}`,
+                  "_blank"
+                )
+              }
+            >
+              <img
+                className="size-4"
+                alt="Zora logo"
+                src="https://res.cloudinary.com/metapass/image/upload/v1746199815/ourzora_logo_bshnqs.jpg"
+              />
+            </button>
+          </div>
         </div>
       </div>
     </div>

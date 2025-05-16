@@ -35,6 +35,7 @@ const ProfilePage = () => {
                             timestamp={moment.createdAt}
                             user={moment.user}
                             coinAddress={moment.coinAddress}
+                            rewards={moment.creatorRewards}
                         />
                     ))
                 )}

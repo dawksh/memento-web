@@ -66,6 +66,7 @@ const MainFeed = () => {
               timestamp={post.createdAt}
               user={post.user}
               coinAddress={post.coinAddress}
+              rewards={post.creatorRewards}
             />
           ))}
       </div>
