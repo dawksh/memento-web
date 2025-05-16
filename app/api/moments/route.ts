@@ -22,13 +22,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
     try {
-        const { title, userAddress, imageUrl } = await req.json()
-
-        const { data } = await backend.post("/moments/create", {
-            title,
-            userAddress,
-            imageUrl
-        })
+        const { data } = await backend.post("/moments/create", await req.json())
         return NextResponse.json(data);
     } catch (error) {
         return NextResponse.json(
