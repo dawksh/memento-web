@@ -9,6 +9,7 @@ import { RefObject, useState, useEffect } from "react"
 import axios from "axios"
 import { Input } from "../ui/input"
 import { useUser } from "@/hooks/useUser"
+import { useQueryClient } from "@tanstack/react-query"
 
 export default function CameraSection({ onClose, onForceClose }: { onClose?: () => void, onForceClose?: () => void }) {
     const {
@@ -31,6 +32,7 @@ export default function CameraSection({ onClose, onForceClose }: { onClose?: () 
     const [caption, setCaption] = useState("")
 
     const { data: user } = useUser()
+    const queryClient = useQueryClient()
 
     useEffect(() => {
         return () => {
@@ -83,6 +85,7 @@ export default function CameraSection({ onClose, onForceClose }: { onClose?: () 
                 userAddress: user.walletAddress,
                 imageUrl: url
             })
+            queryClient.invalidateQueries({ queryKey: ["moments"] })
             setCaption("")
             if (onClose) onClose()
         } catch (error) {

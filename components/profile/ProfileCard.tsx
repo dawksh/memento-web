@@ -20,6 +20,7 @@ import axios from "axios";
 import { useUser } from "@/hooks/useUser";
 import { shortenAddress } from "@/lib/utils";
 import { isAddress } from "viem";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 type ProfileCardProps = {
@@ -42,6 +43,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
     const close = useRef<HTMLButtonElement | null>(null)
 
     const { data: loggedInUser } = useUser()
+    const queryClient = useQueryClient();
 
     const handleSubmit = async () => {
         const updates: any = {
@@ -63,6 +65,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
 
         setLoading(true);
         await axios.post('/api/user', { updates });
+        queryClient.invalidateQueries({ queryKey: ["user", user.walletAddress] });
         setLoading(false);
         close.current?.click();
     }

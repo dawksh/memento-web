@@ -12,6 +12,7 @@ import { FileUploader } from "react-drag-drop-files";
 import { fileToDataURL, uploadImageToCloudinary } from '@/lib/imageHelper';
 import axios from 'axios';
 import { User } from '@/types/user';
+import { useQueryClient } from '@tanstack/react-query';
 
 // Accept user prop
 const ProfileCard = ({ user: userProp }: { user?: User }) => {
@@ -23,6 +24,7 @@ const ProfileCard = ({ user: userProp }: { user?: User }) => {
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
     const close = useRef<HTMLButtonElement>(null);
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         setUsername(user?.username || '');
@@ -50,6 +52,9 @@ const ProfileCard = ({ user: userProp }: { user?: User }) => {
 
         setLoading(true);
         await axios.post('/api/user', { updates });
+        if (user && user.walletAddress) {
+            queryClient.invalidateQueries({ queryKey: ["user", user.walletAddress] });
+        }
         setLoading(false);
         close.current?.click();
     }
