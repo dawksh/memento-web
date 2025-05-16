@@ -168,7 +168,7 @@ const Post = ({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger><div className="px-3 py-1.5 bg-green-50 rounded-2xl flex items-center gap-1">
-                <span className="text-green-600 text-sm font-medium">${rewards}</span>
+                <span className="text-green-600 text-sm font-medium">${Number(rewards) / 2}</span>
               </div></TooltipTrigger>
               <TooltipContent>
                 Creator Rewards for this post
