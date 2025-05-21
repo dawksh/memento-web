@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
-export async function generateMetadata({ params }: { params: { address: string } }) {
-    const { address } = params;
+export async function generateMetadata({ params }: { params: Promise<{ address: string }> }) {
+    const { address } = await params;
     return {
         title: "momnt",
         description: "capture momnts, earn rewards",
