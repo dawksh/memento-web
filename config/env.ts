@@ -4,6 +4,7 @@ const serverSchema = z.object({
     UPSTASH_REDIS_REST_URL: z.string().default(''),
     UPSTASH_REDIS_REST_TOKEN: z.string().default(''),
     FE_API_KEY: z.string().default(''),
+    NEXT_PUBLIC_URL: z.string().default(''),
 });
 
 const clientSchema = z.object({
@@ -23,6 +24,7 @@ export const clientEnv = clientSchema.parse({
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL || '',
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN || '',
     FE_API_KEY: process.env.FE_API_KEY || '',
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL || '',
 });
 
 const env = {

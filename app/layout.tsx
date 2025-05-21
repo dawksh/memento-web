@@ -16,10 +16,19 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
 export const metadata: Metadata = {
   title: "momnt",
   description: "capture momnts, earn rewards",
+  openGraph: {
+    images: [
+      {
+        url: "https://app.momnt.fun/momnt-banner.png",
+        width: 1200,
+        height: 630,
+        alt: "momnt banner"
+      }
+    ]
+  },
   other: {
     "fc:frame": JSON.stringify({
       version: "next",

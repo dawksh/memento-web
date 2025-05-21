@@ -11,6 +11,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { IoShareSocialSharp } from 'react-icons/io5';
+import env from "@/config/env";
 
 
 
@@ -118,8 +120,19 @@ const Post = ({
             </Link>
           </div>
         </div>
-        <div className="text-xs text-gray-500">
-          {format(new Date(timestamp), "MMM d, yyyy")}
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>{format(new Date(timestamp), "MMM d, yyyy")}</span>
+          <button
+            className="hover:bg-gray-100 rounded-full p-1 transition-colors hover:cursor-pointer"
+            aria-label="Share post"
+            onClick={() => {
+              const postUrl = `https://app.momnt.fun/moment/${coinAddress}`;
+              const castUrl = `https://warpcast.com/~/compose?text=checkout%20this%20moment%20on%20momnt!&embeds[]=${postUrl}`
+              window.open(castUrl, "_blank");
+            }}
+          >
+            <IoShareSocialSharp className="size-4 text-gray-500" />
+          </button>
         </div>
       </div>
 
