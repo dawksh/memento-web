@@ -169,9 +169,9 @@ const Post = ({
             </Tooltip>
           </TooltipProvider>
 
-          <div className="p-1.5 bg-white rounded-2xl outline outline-offset-[-1px] outline-black/5 flex items-center">
+          <div className="p-1 bg-white rounded-2xl outline outline-offset-[-1px] outline-black/5 flex items-center min-w-[28px] min-h-[28px] sm:p-1.5">
             <button
-              className="hover:cursor-pointer"
+              className="hover:cursor-pointer w-full h-full flex items-center justify-center"
               onClick={() =>
                 window.open(
                   `https://zora.co/coin/base:${coinAddress}`,
@@ -180,7 +180,7 @@ const Post = ({
               }
             >
               <img
-                className="size-4"
+                className="size-4 object-contain"
                 alt="Zora logo"
                 src="https://res.cloudinary.com/metapass/image/upload/v1746199815/ourzora_logo_bshnqs.jpg"
               />

@@ -96,18 +96,18 @@ const TradeActions = ({ coinAddress }: { coinAddress: string }) => {
   }, [wallets, coinAddress, amount]);
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1 sm:gap-2">
       <Dialog open={buyOpen} onOpenChange={handleBuyOpen}>
         <DialogTrigger asChild>
           <Button
             variant="outline"
             size="sm"
-            className="rounded-2xl border-red-400 flex items-center gap-1 px-3 py-1.5 hover:cursor-pointer"
+            className="rounded-2xl border-red-400 flex items-center gap-0.5 px-2 py-1 sm:px-3 sm:py-1.5 hover:cursor-pointer min-w-0"
           >
-            <div className="size-4 relative overflow-hidden">
+            <div className="size-3.5 sm:size-4 relative overflow-hidden">
               <FaFire fill="red" />
             </div>
-            <span className="text-xs font-medium">Ape In</span>
+            <span className="text-[10px] sm:text-xs font-medium whitespace-nowrap">Ape In</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="bg-white rounded-xl shadow-lg p-6">
@@ -149,12 +149,12 @@ const TradeActions = ({ coinAddress }: { coinAddress: string }) => {
           <Button
             variant="outline"
             size="sm"
-            className="rounded-2xl border-green-500 flex items-center gap-1 px-3 py-1.5 hover:cursor-pointer"
+            className="rounded-2xl border-green-500 flex items-center gap-0.5 px-2 py-1 sm:px-3 sm:py-1.5 hover:cursor-pointer min-w-0"
           >
-            <div className="size-4 relative overflow-hidden">
+            <div className="size-3.5 sm:size-4 relative overflow-hidden">
               <FaDollarSign fill="green" />
             </div>
-            <span className="text-xs font-medium">Cash Out</span>
+            <span className="text-[10px] sm:text-xs font-medium whitespace-nowrap">Cash Out</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="bg-white rounded-xl shadow-lg p-6">
