@@ -2,7 +2,7 @@ import { Moment } from "@/types/moment";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export function useMoments({ coin, user }: { coin?: string, user?: string }) {
+export function useMoments({ coin, user, enabled }: { coin?: string, user?: string, enabled?: boolean }) {
     return useQuery({
         queryKey: ["moments", coin, user],
         queryFn: async () => {
@@ -11,5 +11,6 @@ export function useMoments({ coin, user }: { coin?: string, user?: string }) {
         },
         refetchInterval: 60000 * 1,
         staleTime: 600000,
+        enabled: enabled ?? true,
     })
 }

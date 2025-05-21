@@ -143,3 +143,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
 }
 
 export default ProfileCard;
+
+export const ProfileCardSkeleton = () => (
+    <div className="w-full flex flex-col items-center bg-white rounded-xl p-6 shadow gap-3 animate-pulse">
+        <div className="w-24 h-24 rounded-full bg-gray-200 mb-2" />
+        <div className="h-6 w-32 bg-gray-200 rounded mb-1" />
+        <div className="h-4 w-24 bg-gray-200 rounded mb-2" />
+        <div className="h-4 w-40 bg-gray-200 rounded mb-2" />
+        <div className="h-8 w-24 bg-gray-200 rounded mt-2" />
+    </div>
+);

@@ -1,16 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import { format } from "date-fns";
 import { User } from "@/types/user";
-import {
-  createPublicClient,
-  http,
-  isAddress,
-} from "viem";
-import { getMediaLink, getUserProfileImage, shortenAddress } from "@/lib/utils";
-import { useWallets } from "@privy-io/react-auth";
-import { base } from "viem/chains";
+import { isAddress } from "viem";
+import { getMediaLink, getUserProfileImage, shortenAddress } from "@/lib/utils"
 import TradeActions from "./TradeActions";
-import env from "@/config/env";
 import Link from "next/link";
 import {
   Tooltip,
@@ -198,5 +191,28 @@ const Post = ({
     </div>
   );
 };
+
+// Skeleton loader for Post
+export const PostSkeleton = () => (
+  <div className="w-full px-4 pt-4 pb-4 bg-white rounded-xl shadow-[0px_1px_3px_0px_rgba(0,0,0,0.05)] inline-flex flex-col justify-start items-start gap-5 overflow-hidden animate-pulse">
+    {/* User Header */}
+    <div className="self-stretch flex justify-between items-center">
+      <div className="flex items-center gap-2">
+        <div className="size-6 rounded-full bg-gray-200" />
+        <div className="h-4 w-24 bg-gray-200 rounded" />
+      </div>
+      <div className="h-3 w-16 bg-gray-200 rounded" />
+    </div>
+    {/* Caption */}
+    <div className="self-stretch h-4 w-3/4 bg-gray-200 rounded" />
+    {/* Post Image */}
+    <div className="self-stretch h-48 bg-gray-200 rounded-md" />
+    {/* Action Buttons */}
+    <div className="self-stretch flex justify-between items-center">
+      <div className="h-8 w-20 bg-gray-200 rounded-2xl" />
+      <div className="h-8 w-20 bg-gray-200 rounded-2xl" />
+    </div>
+  </div>
+);
 
 export default Post;
