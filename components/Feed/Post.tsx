@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/tooltip"
 import { IoShareSocialSharp } from 'react-icons/io5';
 import { sdk } from '@farcaster/frame-sdk'
+import { useFarcasterContext } from "@/hooks/useFarcasterContext";
 
 
 interface PostProps {
@@ -93,6 +94,8 @@ const Post = ({
     setImageLoaded(true);
   };
 
+  const { data: context } = useFarcasterContext()
+
   // Generate a clean class name from the imageUrl
   const containerClassName = `post-image-container-style-${imageUrl.replace(
     /[^a-zA-Z0-9]/g,
@@ -126,11 +129,15 @@ const Post = ({
             aria-label="Share post"
             onClick={async () => {
               const postUrl = `https://app.momnt.fun/moment/${coinAddress}`;
-
-              await sdk.actions.composeCast({
-                text: "checkout this moment on momnt!",
-                embeds: [postUrl],
-              })
+              if (context) {
+                await sdk.actions.composeCast({
+                  text: "checkout this moment on momnt!",
+                  embeds: [postUrl],
+                })
+              } else {
+                const castUrl = `https://warpcast.com/~/compose?text=checkout%20this%20moment%20on%20momnt!&embeds[]=${postUrl}`
+                window.open(castUrl, "_blank");
+              }
             }}
           >
             <IoShareSocialSharp className="size-4 text-gray-500" />
