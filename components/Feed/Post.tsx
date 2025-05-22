@@ -12,8 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { IoShareSocialSharp } from 'react-icons/io5';
-import env from "@/config/env";
-
+import { sdk } from '@farcaster/frame-sdk'
 
 
 interface PostProps {
@@ -125,10 +124,13 @@ const Post = ({
           <button
             className="hover:bg-gray-100 rounded-full p-1 transition-colors hover:cursor-pointer"
             aria-label="Share post"
-            onClick={() => {
+            onClick={async () => {
               const postUrl = `https://app.momnt.fun/moment/${coinAddress}`;
-              const castUrl = `https://warpcast.com/~/compose?text=checkout%20this%20moment%20on%20momnt!&embeds[]=${postUrl}`
-              window.open(castUrl, "_blank");
+
+              await sdk.actions.composeCast({
+                text: "checkout this moment on momnt!",
+                embeds: [postUrl],
+              })
             }}
           >
             <IoShareSocialSharp className="size-4 text-gray-500" />
