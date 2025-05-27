@@ -6,6 +6,7 @@ import { useMoments } from "@/hooks/useMoments";
 import OpenCamera from "../Camera/OpenCamera";
 import { usePrivy } from "@privy-io/react-auth";
 import { Camera } from "lucide-react";
+import { PaginationBar } from "@/components/Shared/PaginationBar";
 
 const Skeleton = () => (
   <div className="w-full px-4 pt-4 pb-4 bg-white rounded-xl shadow animate-pulse flex flex-col gap-4">
@@ -27,9 +28,12 @@ const getTimeLeft = (target: number) => {
 };
 
 const MainFeed = () => {
-  const { data: posts, isLoading } = useMoments({});
+  const [page, setPage] = useState(1);
+  const { data: moments, isLoading } = useMoments({ page });
   const { authenticated } = usePrivy();
 
+  const handleIncrement = () => setPage((p) => Math.min(p + 1, moments?.pagination.pages || p));
+  const handleDecrement = () => setPage((p) => Math.max(1, p - 1));
 
   return (
     <div className="w-5/6 md:w-3/5 mx-auto p-2">
@@ -38,7 +42,7 @@ const MainFeed = () => {
           Array.from({ length: 3 }).map((_, i) => (
             <Skeleton key={i} />
           ))}
-        {!isLoading && posts && posts.length === 0 && (
+        {!isLoading && moments?.posts && moments?.posts.length === 0 && (
           <div className="text-center text-gray-400 py-8">
             No posts yet
           </div>
@@ -57,8 +61,8 @@ const MainFeed = () => {
           </div>
         )}
         {!isLoading &&
-          posts &&
-          posts.map((post, index) => (
+          moments?.posts &&
+          moments?.posts.map((post, index) => (
             <Post
               key={index}
               imageUrl={post.assetURL}
@@ -69,20 +73,21 @@ const MainFeed = () => {
               rewards={post.creatorRewards}
             />
           ))}
+        <div className="flex justify-center pt-4">
+          <PaginationBar
+            pages={moments?.pagination.pages}
+            currentPage={page}
+            setPage={setPage}
+            onIncrement={handleIncrement}
+            onDecrement={handleDecrement}
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-
 const PostButton = () => {
-  // const [target] = useState(() => Date.now() + 3 * 60 * 60 * 1000);
-
-  // useEffect(() => {
-  //   const id = setInterval(() => setTime(getTimeLeft(target)), 1000);
-  //   return () => clearInterval(id);
-  // }, [target]);
-  // const [{ h, m, s }, setTime] = useState(getTimeLeft(target));
   return (
     <div className="bg-black text-white shadow-lg rounded-full px-1 py-2 hover:scale-105 transition-transform">
       <Camera />

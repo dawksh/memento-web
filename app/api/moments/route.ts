@@ -8,13 +8,15 @@ export async function GET(req: NextRequest) {
         const { data } = await backend.get("/moments", {
             params: {
                 coin: searchParams.get('coin'),
-                user: searchParams.get('user')
+                user: searchParams.get('user'),
+                page: searchParams.get('page'),
+                limit: searchParams.get('limit')
             }
         })
         return NextResponse.json(data);
     } catch (error) {
         return NextResponse.json(
-            { error: 'Failed to fetch user' },
+            { error: 'Failed to fetch moments' },
             { status: 500 }
         );
     }
