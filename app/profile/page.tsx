@@ -22,10 +22,10 @@ const ProfilePage = () => {
                         <Skeleton />
                         <Skeleton />
                     </>
-                ) : moments?.length === 0 ? (
+                ) : moments?.posts?.length === 0 ? (
                     <div className="text-center text-gray-400 py-8">No posts yet</div>
                 ) : (
-                    moments?.map(moment => (
+                    moments?.posts.map(moment => (
                         <Post
                             key={moment.id}
                             imageUrl={moment.assetURL}

@@ -23,7 +23,7 @@ const Page = () => {
     const { data: moments } = useMoments({ coin: address as string })
     return (
         <div className='flex flex-col gap-4 w-full md:w-1/3 mx-auto p-4'>
-            {moments?.map((moment) => (
+            {moments?.posts.map((moment) => (
                 <div key={moment.id}>
                     <Post
                         imageUrl={moment.assetURL}

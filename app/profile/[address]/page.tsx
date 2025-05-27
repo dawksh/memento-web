@@ -24,10 +24,10 @@ const ProfilePage = () => {
                 {user && <ProfileCard user={user} />}
             </section>
             <section className={cn('w-full md:w-1/3 flex flex-col gap-4 mx-auto')}>
-                {moments?.length === 0 ? (
+                {moments?.posts.length === 0 ? (
                     <div className="text-center text-gray-400 py-8">No posts yet</div>
                 ) : (
-                    moments?.map(moment => (
+                    moments?.posts.map(moment => (
                         <Post
                             key={moment.id}
                             imageUrl={moment.assetURL}
