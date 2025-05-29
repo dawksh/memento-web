@@ -1,7 +1,6 @@
 import {
     Pagination,
     PaginationContent,
-    PaginationEllipsis,
     PaginationItem,
     PaginationLink,
     PaginationNext,
@@ -22,31 +21,11 @@ export const PaginationBar = ({
     onDecrement: () => void;
     setPage: React.Dispatch<React.SetStateAction<number>>
 }) => {
-    const showPages = () => {
-        const items = [];
-        const maxVisible = 5;
-        const start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-        const end = Math.min(pages, start + maxVisible - 1);
-
-        for (let i = start; i <= end; i++) {
-            items.push(
-                <PaginationItem key={i}>
-                    <PaginationLink
-                        className="cursor-pointer"
-                        isActive={currentPage === i}
-                        onClick={() => {
-                            if (i !== currentPage) {
-                                setPage(i);
-                            }
-                        }}
-                    >
-                        {i}
-                    </PaginationLink>
-                </PaginationItem>
-            );
-        }
-        return items;
-    };
+    const pageNumbers = [
+        currentPage - 1 >= 1 ? currentPage - 1 : null,
+        currentPage,
+        currentPage + 1 <= pages ? currentPage + 1 : null
+    ].filter(Boolean);
 
     return (
         <Pagination className="flex justify-center p-4 mb-8">
@@ -54,7 +33,17 @@ export const PaginationBar = ({
                 <PaginationItem>
                     <PaginationPrevious className="cursor-pointer" onClick={onDecrement} />
                 </PaginationItem>
-                {showPages()}
+                {pageNumbers.map((num) => (
+                    <PaginationItem key={num}>
+                        <PaginationLink
+                            className="cursor-pointer"
+                            isActive={currentPage === num}
+                            onClick={() => num !== currentPage && setPage(num as number)}
+                        >
+                            {num}
+                        </PaginationLink>
+                    </PaginationItem>
+                ))}
                 <PaginationItem>
                     <PaginationNext className="cursor-pointer" onClick={onIncrement} />
                 </PaginationItem>
