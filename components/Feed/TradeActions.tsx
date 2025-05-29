@@ -78,8 +78,13 @@ const TradeActions = ({ coinAddress }: { coinAddress: string }) => {
     if (!wallet) return;
     setLoading(true)
     try {
+      let provider: any
+      if (ctx) {
+        provider = await sdk.wallet.getEthereumProvider()
+      } else {
+        provider = await wallet.getEthereumProvider()
+      }
       await wallet.switchChain(base.id);
-      const provider = await wallet.getEthereumProvider();
       const { publicClient, walletClient } = getClients(provider, wallet.address as Hex);
       const sellParams = {
         direction: "sell" as const,
