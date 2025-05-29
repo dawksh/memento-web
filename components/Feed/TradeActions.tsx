@@ -14,6 +14,8 @@ import {
 import { useBalances } from "@/hooks/useBalances";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react"
+import { useFarcasterContext } from "@/hooks/useFarcasterContext";
+import sdk from "@farcaster/frame-sdk";
 
 const TradeActions = ({ coinAddress }: { coinAddress: string }) => {
   const { wallets } = useWallets();
@@ -33,13 +35,20 @@ const TradeActions = ({ coinAddress }: { coinAddress: string }) => {
     !open && setAmount("0")
   };
 
+  const { data: ctx } = useFarcasterContext()
+
   const buyCoin = useCallback(async () => {
     const wallet = wallets[0];
     if (!wallet) return;
     setLoading(true)
     try {
+      let provider: any
+      if (ctx) {
+        provider = await sdk.wallet.getEthereumProvider()
+      } else {
+        provider = await wallet.getEthereumProvider()
+      }
       await wallet.switchChain(base.id);
-      const provider = await wallet.getEthereumProvider();
       const { publicClient, walletClient } = getClients(provider, wallet.address as Hex);
       const buyParams = {
         direction: "buy" as const,

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@farcaster/frame-node": "^0.0.23",
-    "@farcaster/frame-sdk": "^0.0.36",
+    "@farcaster/frame-sdk": "^0.0.53",
     "@privy-io/react-auth": "^2.11.1",
     "@radix-ui/react-avatar": "^1.1.9",
     "@radix-ui/react-dialog": "^1.1.11",

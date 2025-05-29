@@ -23,7 +23,6 @@ export default function Home() {
   const { ready, authenticated } = usePrivy();
   const { initLoginToFrame, loginToFrame } = useLoginToFrame();
 
-  // Login to Mini App with Privy automatically
   useEffect(() => {
     if (ready && !authenticated) {
       const login = async () => {
